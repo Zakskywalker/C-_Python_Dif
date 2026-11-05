@@ -1,0 +1,3774 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C# // PYTHON TERMINAL REFERENCE &amp; DSA MATRIX</title>
+  <style>
+    :root {
+      --bg-core: #040704;
+      --bg-panel: #081008;
+      --bg-card: #0b160b;
+      --bg-code: #030603;
+      --fg-primary: #00ff41;
+      --fg-bright: #7dff9b;
+      --fg-muted: #4ead61;
+      --fg-dim: #266332;
+      --border-green: #14491e;
+      --border-bright: #00ff41;
+      --accent-amber: #ffb000;
+      --accent-cyan: #00e5ff;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-core);
+      color: var(--fg-primary);
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      line-height: 1.5;
+      background-image: radial-gradient(rgba(0, 255, 65, 0.04) 1px, transparent 0);
+      background-size: 20px 20px;
+      padding-bottom: 60px;
+    }
+
+    /* Sticky Terminal Top Navigation */
+    .terminal-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(4, 9, 4, 0.96);
+      border-bottom: 2px solid var(--fg-primary);
+      box-shadow: 0 4px 20px rgba(0, 255, 65, 0.15);
+      padding: 12px 20px;
+      backdrop-filter: blur(6px);
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--fg-bright);
+      text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+    }
+
+    .brand-title span.cursor {
+      display: inline-block;
+      width: 9px;
+      height: 16px;
+      background: var(--fg-primary);
+      vertical-align: middle;
+      margin-left: 4px;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .terminal-input,
+    .terminal-select,
+    .terminal-btn {
+      background: var(--bg-code);
+      color: var(--fg-primary);
+      border: 1px solid var(--fg-muted);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      padding: 6px 10px;
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .terminal-select[multiple] {
+      min-width: 190px;
+      max-height: 100px;
+    }
+
+    .print-sections-control[hidden] {
+      display: none;
+    }
+
+    .terminal-input:focus,
+    .terminal-select:focus {
+      border-color: var(--fg-bright);
+      box-shadow: 0 0 8px rgba(0, 255, 65, 0.35);
+    }
+
+    .terminal-input {
+      min-width: 250px;
+    }
+
+    .terminal-btn {
+      cursor: pointer;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .terminal-btn:hover,
+    .terminal-btn.active {
+      background: var(--fg-primary);
+      color: var(--bg-core);
+      border-color: var(--fg-primary);
+      box-shadow: 0 0 10px rgba(0, 255, 65, 0.45);
+    }
+
+    .nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border-green);
+    }
+
+    .nav-pill {
+      background: var(--bg-panel);
+      color: var(--fg-muted);
+      border: 1px solid var(--border-green);
+      padding: 4px 10px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .nav-pill:hover,
+    .nav-pill.active {
+      color: var(--bg-core);
+      background: var(--fg-primary);
+      border-color: var(--fg-primary);
+      font-weight: 700;
+    }
+
+    /* Main Container & Column Sticky Headers */
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 18px 20px;
+    }
+
+    .lang-banner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+      padding: 10px 14px;
+      background: var(--bg-panel);
+      border: 1px solid var(--fg-muted);
+    }
+
+    .lang-col-header {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--fg-bright);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-left: 4px solid var(--fg-primary);
+      padding-left: 10px;
+    }
+
+    .lang-col-header span.sub {
+      font-size: 0.78rem;
+      color: var(--fg-muted);
+      font-weight: 400;
+    }
+
+    /* Category Section */
+    .category-section {
+      margin-bottom: 34px;
+      scroll-margin-top: 140px;
+    }
+
+    .category-banner {
+      background: linear-gradient(90deg, rgba(0, 255, 65, 0.16) 0%, rgba(8, 16, 8, 0.2) 100%);
+      border-left: 4px solid var(--fg-primary);
+      border-top: 1px solid var(--border-green);
+      border-bottom: 1px solid var(--border-green);
+      padding: 8px 14px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .category-banner h2 {
+      font-size: 1.05rem;
+      color: var(--fg-bright);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .category-banner span {
+      font-size: 0.76rem;
+      color: var(--fg-muted);
+    }
+
+    /* Side-by-Side Comparison Row */
+    .comparison-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+      align-items: stretch;
+    }
+
+    .lang-cell {
+      background: var(--bg-card);
+      border: 1px solid var(--border-green);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 12px 14px;
+      position: relative;
+      transition: border-color 0.15s ease;
+    }
+
+    .lang-cell:hover {
+      border-color: var(--fg-muted);
+    }
+
+    .cell-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid var(--border-green);
+      padding-bottom: 6px;
+    }
+
+    .cell-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .lang-tag {
+      font-size: 0.68rem;
+      color: var(--fg-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .cell-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--fg-bright);
+    }
+
+    .badges-wrap {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .scope-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border: 1px solid var(--accent-amber);
+      color: var(--accent-amber);
+      background: rgba(255, 176, 0, 0.08);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .scope-badge[data-scope="FUNCTION / METHOD"] {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      background: rgba(0, 229, 255, 0.08);
+    }
+
+    .scope-badge[data-scope="CLASS / MODULE"] {
+      border-color: #ff6ec7;
+      color: #ff6ec7;
+      background: rgba(255, 110, 199, 0.08);
+    }
+
+    .scope-badge[data-scope="WHOLE SCRIPT"] {
+      border-color: var(--fg-primary);
+      color: var(--fg-primary);
+      background: rgba(0, 255, 65, 0.1);
+    }
+
+    .cell-desc {
+      font-size: 0.8rem;
+      color: var(--fg-muted);
+      margin-bottom: 10px;
+    }
+
+    .code-wrapper {
+      position: relative;
+      background: var(--bg-code);
+      border: 1px solid var(--border-green);
+      margin-top: auto;
+    }
+
+    .code-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 255, 65, 0.06);
+      border-bottom: 1px solid var(--border-green);
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      color: var(--fg-muted);
+    }
+
+    .copy-btn {
+      background: transparent;
+      color: var(--fg-primary);
+      border: 1px solid var(--fg-muted);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .copy-btn:hover {
+      background: var(--fg-primary);
+      color: var(--bg-core);
+    }
+
+    .copy-btn.copied {
+      background: var(--accent-amber);
+      color: var(--bg-core);
+      border-color: var(--accent-amber);
+    }
+
+    pre {
+      padding: 10px 12px;
+      overflow-x: auto;
+      font-size: 0.79rem;
+      line-height: 1.45;
+      color: var(--fg-bright);
+      tab-size: 4;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      white-space: pre;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .site-map-wrap {
+      overflow-x: auto;
+      padding: 10px;
+      background: var(--bg-code);
+      border: 1px solid var(--border-green);
+    }
+
+    .site-map {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .site-map .map-edge {
+      stroke: var(--fg-muted);
+      stroke-width: 2;
+      opacity: 0.65;
+    }
+
+    .site-map .map-node rect {
+      fill: var(--bg-card);
+      stroke: var(--fg-primary);
+      stroke-width: 2;
+      rx: 5;
+    }
+
+    .site-map .map-node text {
+      fill: var(--fg-bright);
+      font: 10px var(--font-mono);
+      text-anchor: middle;
+    }
+
+    .site-map .map-node:hover rect,
+    .site-map .map-node:focus rect {
+      fill: var(--border-green);
+      stroke: var(--accent-amber);
+    }
+
+    .map-legend,
+    .flashcard-hint {
+      color: var(--fg-muted);
+      font-size: 0.78rem;
+      margin-top: 8px;
+    }
+
+    .flashcard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 12px;
+    }
+
+    .flashcard-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-green);
+      padding: 12px;
+      min-height: 150px;
+    }
+
+    .flashcard-toggle {
+      display: block;
+      width: 100%;
+      background: transparent;
+      color: var(--fg-bright);
+      border: 0;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .flashcard-toggle:focus-visible {
+      outline: 2px solid var(--accent-cyan);
+      outline-offset: 3px;
+    }
+
+    .flashcard-topic {
+      display: block;
+      color: var(--accent-amber);
+      font-size: 0.72rem;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .flashcard-question {
+      display: block;
+      font-weight: 700;
+    }
+
+    .flashcard-answer {
+      border-top: 1px dashed var(--border-green);
+      color: var(--fg-muted);
+      font-size: 0.8rem;
+      margin-top: 10px;
+      padding-top: 9px;
+    }
+
+    .flashcard-answer strong {
+      color: var(--fg-bright);
+    }
+
+    .flashcard-answer p + p {
+      margin-top: 6px;
+    }
+
+    .flashcard-takeaway {
+      color: var(--accent-cyan);
+      margin-top: 8px !important;
+    }
+
+    .comparison-row.flashcard-row {
+      display: block;
+    }
+
+    /* Responsive collapse for narrow screens */
+    @media (max-width: 980px) {
+
+      .comparison-row,
+      .lang-banner {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* PRINT MEDIA QUERIES FOR CLEAN EXPORT / PAPER PRINTING */
+    @media print {
+      @page {
+        margin: 10mm;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: #17351d !important;
+        font-size: 9.5pt !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .terminal-header .controls-row,
+      .terminal-header .nav-pills,
+      .copy-btn,
+      .brand-title span.cursor {
+        display: none !important;
+      }
+
+      .terminal-header {
+        position: static !important;
+        background: #ffffff !important;
+        border-bottom: 2px solid #247a36 !important;
+        box-shadow: none !important;
+        padding: 4px 0 8px 0 !important;
+        margin-bottom: 10px !important;
+      }
+
+      .brand-title {
+        color: #176b2c !important;
+        text-shadow: none !important;
+        font-size: 14pt !important;
+      }
+
+      .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+      }
+
+      .lang-banner {
+        grid-template-columns: 1fr 1fr !important;
+        background: #eef7ef !important;
+        border: 1px solid #54965f !important;
+        margin-bottom: 10px !important;
+        padding: 6px 10px !important;
+      }
+
+      .lang-col-header,
+      .lang-col-header span.sub,
+      .category-banner h2,
+      .category-banner span,
+      .cell-title,
+      .cell-desc,
+      .lang-tag {
+        color: #244b2c !important;
+      }
+
+      .category-banner {
+        background: #e5f1e7 !important;
+        border: 1px solid #579364 !important;
+        border-left: 4px solid #247a36 !important;
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+
+      .comparison-row {
+        grid-template-columns: 1fr 1fr !important;
+        min-width: 0 !important;
+        gap: 10px !important;
+        margin-bottom: 10px !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .lang-cell {
+        background: #ffffff !important;
+        border: 1px solid #718a75 !important;
+        padding: 8px !important;
+      }
+
+      .scope-badge {
+        border: 1px solid #718a75 !important;
+        color: #315a38 !important;
+        background: #eef7ef !important;
+      }
+
+      .code-wrapper {
+        background: #f5faf5 !important;
+        border: 1px solid #94a797 !important;
+      }
+
+      .code-toolbar {
+        background: #e8f1e9 !important;
+        color: #315a38 !important;
+        border-bottom: 1px solid #94a797 !important;
+      }
+
+      pre,
+      code {
+        color: #17351d !important;
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
+        font-size: 8.5pt !important;
+      }
+
+      .category-section.print-exclude {
+        display: none !important;
+      }
+
+      body.print-all .category-section,
+      body.print-all .category-section.hidden,
+      body.print-all .comparison-row.hidden,
+      body.print-selected .category-section.print-selected-section,
+      body.print-selected .category-section.print-selected-section.hidden,
+      body.print-selected .category-section.print-selected-section .comparison-row.hidden {
+        display: block !important;
+      }
+
+      body.print-all .comparison-row,
+      body.print-selected .category-section.print-selected-section .comparison-row {
+        display: grid !important;
+      }
+
+      .flashcard-answer[hidden] {
+        display: block !important;
+      }
+
+      .site-map-wrap {
+        overflow: visible !important;
+        background: #f5faf5 !important;
+        border-color: #94a797 !important;
+      }
+
+      .site-map {
+        width: 100% !important;
+      }
+
+      .site-map .map-node rect {
+        fill: #ffffff !important;
+        stroke: #247a36 !important;
+      }
+
+      .site-map .map-node text {
+        fill: #17351d !important;
+      }
+
+      .site-map .map-edge {
+        stroke: #54965f !important;
+      }
+
+      .flashcard-card {
+        background: #ffffff !important;
+        border-color: #718a75 !important;
+      }
+
+      .flashcard-answer {
+        color: #315a38 !important;
+        border-color: #718a75 !important;
+      }
+
+      .flashcard-answer strong {
+        color: #244b2c !important;
+      }
+
+      body.print-grayscale {
+        color: #000000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body.print-grayscale .terminal-header,
+      body.print-grayscale .lang-banner,
+      body.print-grayscale .category-banner,
+      body.print-grayscale .lang-cell,
+      body.print-grayscale .scope-badge,
+      body.print-grayscale .code-wrapper,
+      body.print-grayscale .code-toolbar,
+      body.print-grayscale .site-map-wrap,
+      body.print-grayscale .flashcard-card {
+        background: #ffffff !important;
+        color: #000000 !important;
+        border-color: #444444 !important;
+      }
+
+      body.print-grayscale .brand-title,
+      body.print-grayscale .lang-col-header,
+      body.print-grayscale .lang-col-header span.sub,
+      body.print-grayscale .category-banner h2,
+      body.print-grayscale .category-banner span,
+      body.print-grayscale .cell-title,
+      body.print-grayscale .cell-desc,
+      body.print-grayscale .lang-tag,
+      body.print-grayscale .scope-badge,
+      body.print-grayscale .code-toolbar,
+      body.print-grayscale pre,
+      body.print-grayscale code,
+      body.print-grayscale .flashcard-answer,
+      body.print-grayscale .flashcard-answer strong,
+      body.print-grayscale .flashcard-toggle,
+      body.print-grayscale .flashcard-topic,
+      body.print-grayscale .map-legend,
+      body.print-grayscale .site-map .map-node text {
+        color: #000000 !important;
+      }
+
+      body.print-grayscale .site-map .map-node rect {
+        fill: #ffffff !important;
+        stroke: #444444 !important;
+      }
+
+      body.print-grayscale .site-map .map-edge {
+        stroke: #555555 !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="terminal-header">
+    <div class="header-top">
+      <div class="brand-title">
+        root@dev-matrix:~# diff --side-by-side C#_NET9 PYTHON_3.13<span class="cursor"></span>
+      </div>
+      <div class="controls-row">
+        <input type="text" id="searchInput" class="terminal-input" placeholder="Search title, DSA, LINQ, keyword..."
+          aria-label="Search cheat sheet" />
+        <select id="scopeSelect" class="terminal-select" aria-label="Filter by code scope">
+          <option value="ALL">SCOPE: ALL LEVELS</option>
+          <option value="CLI">SCOPE: CLI</option>
+          <option value="SNIPPET">SCOPE: SNIPPET</option>
+          <option value="FUNCTION / METHOD">SCOPE: FUNCTION / METHOD</option>
+          <option value="CLASS / MODULE">SCOPE: CLASS / MODULE</option>
+          <option value="WHOLE SCRIPT">SCOPE: WHOLE SCRIPT</option>
+        </select>
+        <select id="printScopeSelect" class="terminal-select" aria-label="Choose what to print">
+          <option value="all">PRINT: ALL SECTIONS</option>
+          <option value="selected">PRINT: SELECTED SECTIONS</option>
+          <option value="current">PRINT: CURRENT VIEW</option>
+        </select>
+        <select id="printSectionsSelect" class="terminal-select print-sections-control" aria-label="Select sections to print" multiple hidden></select>
+        <select id="printColorSelect" class="terminal-select" aria-label="Choose print colors">
+          <option value="color">PRINT: COLOR</option>
+          <option value="grayscale">PRINT: BLACK &amp; WHITE</option>
+        </select>
+        <button class="terminal-btn" id="resetBtn" type="button">[RESET]</button>
+        <button class="terminal-btn" id="printBtn" type="button">[PRINT_DOCUMENT]</button>
+      </div>
+    </div>
+    <nav class="nav-pills" id="categoryNav">
+      <button class="nav-pill active" data-cat="ALL">00://ALL_SECTIONS</button>
+      <button class="nav-pill" data-cat="bootstrap">01://CLI_BOOTSTRAP</button>
+      <button class="nav-pill" data-cat="types">02://TYPES_STRINGS_SLICING</button>
+      <button class="nav-pill" data-cat="control">03://FLOW_PATTERN_MATCHING</button>
+      <button class="nav-pill" data-cat="functions">04://FUNCS_GENERATORS_OOP</button>
+      <button class="nav-pill" data-cat="collections">05://LINQ_COMPREHENSIONS</button>
+      <button class="nav-pill" data-cat="io_async">06://IO_ASYNC_CONCURRENCY</button>
+      <button class="nav-pill" data-cat="dsa_core">07://DSA_STRUCTURES</button>
+      <button class="nav-pill" data-cat="dsa_hard">08://DSA_ROTATIONS_GRAPHS_TRIE</button>
+      <button class="nav-pill" data-cat="dsa_more">09://DSA_LISTS_TREES_GRAPHS</button>
+      <button class="nav-pill" data-cat="dsa_patterns">10://DSA_ALGORITHM_PATTERNS</button>
+      <button class="nav-pill" data-cat="source_files">11://SOURCE_FILES</button>
+      <button class="nav-pill" data-cat="site_map">12://SITE_MAP</button>
+      <button class="nav-pill" data-cat="flashcards">13://FLASH_CARDS</button>
+      <button class="nav-pill" data-cat="imports_api">14://USING_IMPORT_API_TREE</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="lang-banner">
+      <div class="lang-col-header">
+        <span>LEFT COLUMN // C# (.NET 8 / 9)</span>
+        <span class="sub">Static / JIT &amp; AOT / Strongly Typed</span>
+      </div>
+      <div class="lang-col-header">
+        <span>RIGHT COLUMN // PYTHON (3.12 / 3.13)</span>
+        <span class="sub">Dynamic / Type-Hinted / Reference Counted + GC</span>
+      </div>
+    </div>
+
+    <div id="sheetsRoot"></div>
+  </main>
+
+  <script>
+    const CHEAT_SHEET_DATA = [
+      {
+        id: "bootstrap",
+        title: "01 // POST-IDE CLI BOOTSTRAP, ENV & ENTRY POINTS",
+        subtitle: "Project initialization, dependency management, and top-level execution right after IDE install",
+        rows: [
+          {
+            cs: {
+              title: "Project Init, Dependencies & Build CLI",
+              scope: "CLI",
+              desc: "Scaffolds a solution, console app, xUnit test project, adds NuGet packages, and executes.",
+              code: `# Create solution + console app + test project
+dotnet new sln -n MatrixCore
+dotnet new console -n MatrixCore.App
+dotnet sln add MatrixCore.App/MatrixCore.App.csproj
+
+# Install NuGet package & restore
+dotnet add MatrixCore.App package Newtonsoft.Json
+dotnet build --configuration Release
+
+# Call: dotnet run --project MatrixCore.App`
+            },
+            py: {
+              title: "Virtual Env, Pip Dependencies & Execution CLI",
+              scope: "CLI",
+              desc: "Creates an isolated virtual environment, activates it, installs packages, and freezes lockfile.",
+              code: `# Create & activate virtual environment
+python -m venv .venv
+# Windows: .venv\\Scripts\\activate | Linux/Mac: source .venv/bin/activate
+
+# Install packages & export requirements
+pip install pytest requests
+pip freeze > requirements.txt
+
+# Call: python main.py`
+            }
+          },
+          {
+            cs: {
+              title: "Entry Point & Command-Line Args",
+              scope: "WHOLE SCRIPT",
+              desc: "Standard Program class with Main method (or top-level statements) parsing CLI arguments and returning exit code.",
+              code: `using System;
+
+namespace MatrixCore;
+
+internal static class Program
+{
+    private static int Main(string[] args)
+    {
+        string target = args.Length > 0 ? args[0] : "localhost";
+        Console.WriteLine($"[INIT] Target host: {target}");
+        return 0;
+    }
+}
+
+// Call: dotnet run -- 192.168.1.50`
+            },
+            py: {
+              title: "Entry Point Guard & sys.argv",
+              scope: "WHOLE SCRIPT",
+              desc: "Idiomatic __name__ == '__main__' guard preventing execution when imported as a module.",
+              code: `import sys
+
+def main(argv: list[str]) -> int:
+    target = argv[1] if len(argv) > 1 else "localhost"
+    print(f"[INIT] Target host: {target}")
+    return 0
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv))
+
+# Call: python app.py 192.168.1.50`
+            }
+          }
+        ]
+      },
+      {
+        id: "types",
+        title: "02 // TYPES, TUPLES, STRINGS & ARRAY SLICING",
+        subtitle: "Value vs. reference types, tuple unpacking, formatting, and range slicing",
+        rows: [
+          {
+            cs: {
+              title: "Variables, Type Inference & Tuple Deconstruction",
+              scope: "SNIPPET",
+              desc: "Explicit or var compile-time inference, nullable value/reference types, and in-place tuple swap.",
+              code: `int port = 8080;
+var host = "127.0.0.1"; // Compiled as string
+int? retryLimit = null;
+int activeRetries = retryLimit ?? 3;
+
+// ValueTuple deconstruction & swap without temp variable
+(int a, int b) = (10, 20);
+(a, b) = (b, a);
+
+// Call: Console.WriteLine($"{host}:{port} | a={a}, b={b}, retries={activeRetries}");`
+            },
+            py: {
+              title: "Dynamic Binding, Type Hints & Tuple Unpacking",
+              scope: "SNIPPET",
+              desc: "Runtime dynamic typing with optional static type annotations and star unpacking.",
+              code: `port: int = 8080
+host: str = "127.0.0.1"
+retry_limit: int | None = None
+active_retries: int = retry_limit if retry_limit is not None else 3
+
+# Tuple unpacking & in-place swap
+a, b = 10, 20
+a, b = b, a
+first, *middle, last = [1, 2, 3, 4, 5]
+
+# Call: print(f"{host}:{port} | a={a}, b={b}, middle={middle}")`
+            }
+          },
+          {
+            cs: {
+              title: "String Interpolation, Raw Strings & StringBuilder",
+              scope: "SNIPPET",
+              desc: "Use StringBuilder inside loops to avoid O(n^2) immutable string allocations.",
+              code: `using System.Text;
+
+double latency = 12.3456;
+string msg = $"Latency: {latency:F2} ms";
+string rawJson = """{"status": "OK", "code": 200}""";
+
+var sb = new StringBuilder();
+for (int i = 0; i < 3; i++) sb.Append(i).Append('-');
+string built = sb.ToString().TrimEnd('-');
+
+// Call: Console.WriteLine($"{msg} | {rawJson} | {built}");`
+            },
+            py: {
+              title: "f-Strings, Debug Specifiers & O(n) Join",
+              scope: "SNIPPET",
+              desc: "Join a list of fragments rather than concatenating strings in a loop (avoids O(n^2) copies).",
+              code: `latency: float = 12.3456
+msg: str = f"Latency: {latency:.2f} ms"
+debug_out: str = f"{latency=}"  # Outputs: latency=12.3456
+
+# O(n) string building via list comprehension + join
+built: str = "-".join(str(i) for i in range(3))
+
+# Call: print(f"{msg} | {debug_out} | {built}")`
+            }
+          },
+          {
+            cs: {
+              title: "Index (^fromEnd) & Range (start..end) Slicing",
+              scope: "SNIPPET",
+              desc: "C# 8+ Index and Range operators slice arrays or Span<T> views without manual length math.",
+              code: `int[] data = [10, 20, 30, 40, 50, 60];
+int lastItem = data[^1];          // 60
+int[] middle = data[1..4];        // [20, 30, 40] (4 is exclusive)
+int[] tail = data[^3..];          // [40, 50, 60]
+
+// Zero-allocation memory slice via Span<int>
+Span<int> window = data.AsSpan(2, 3); // [30, 40, 50]
+
+// Call: Console.WriteLine($"Last: {lastItem}, Mid: {string.Join(",", middle)}");`
+            },
+            py: {
+              title: "Sequence Slicing [start:stop:step] & Reversal",
+              scope: "SNIPPET",
+              desc: "Negative indices count from the end; step -1 reverses sequences in O(n).",
+              code: `data: list[int] = [10, 20, 30, 40, 50, 60]
+last_item: int = data[-1]         # 60
+middle: list[int] = data[1:4]     # [20, 30, 40]
+tail: list[int] = data[-3:]       # [40, 50, 60]
+reversed_copy: list[int] = data[::-1]
+every_second: list[int] = data[::2]
+
+# Call: print(f"Last: {last_item}, Mid: {middle}, Rev: {reversed_copy}")`
+            }
+          }
+        ]
+      },
+      {
+        id: "control",
+        title: "03 // CONTROL FLOW, PATTERN MATCHING & ITERATION",
+        subtitle: "Switch expressions vs. structural match/case, indexed enumeration, and zipping",
+        rows: [
+          {
+            cs: {
+              title: "Switch Expressions & Property/Relational Patterns",
+              scope: "FUNCTION / METHOD",
+              desc: "Declarative pattern matching over tuples, relational bounds, and object shapes.",
+              code: `public static string ClassifyPacket((string Proto, int Port, int Size) pkt) =>
+    pkt switch
+    {
+        ("TCP", 443, > 0) => "HTTPS_ENCRYPTED",
+        ("TCP", 80, _)    => "HTTP_PLAIN",
+        (_, _, > 9000)    => "JUMBO_FRAME",
+        (_, < 1024, _)    => "PRIVILEGED_PORT",
+        _                 => "UNCLASSIFIED"
+    };
+
+// Call: Console.WriteLine(ClassifyPacket(("TCP", 443, 512)));`
+            },
+            py: {
+              title: "Structural Pattern Matching (match / case)",
+              scope: "FUNCTION / METHOD",
+              desc: "Matches sequence shapes, mappings, guards (if), and binds variables inline.",
+              code: `def classify_packet(pkt: tuple[str, int, int]) -> str:
+    match pkt:
+        case ("TCP", 443, size) if size > 0:
+            return "HTTPS_ENCRYPTED"
+        case ("TCP", 80, _):
+            return "HTTP_PLAIN"
+        case (_, _, size) if size > 9000:
+            return "JUMBO_FRAME"
+        case (_, port, _) if port < 1024:
+            return "PRIVILEGED_PORT"
+        case _:
+            return "UNCLASSIFIED"
+
+# Call: print(classify_packet(("TCP", 443, 512)))`
+            }
+          },
+          {
+            cs: {
+              title: "Indexed Iteration & Parallel Sequence Zip",
+              scope: "SNIPPET",
+              desc: "Use Index() (.NET 9) or Select((val, idx)) for index tracking, and Zip for pairing.",
+              code: `using System.Linq;
+
+string[] hosts = ["alpha", "beta", "gamma"];
+int[] latencies = [12, 19, 8];
+
+foreach (var (host, idx) in hosts.Select((h, i) => (h, i)))
+{
+    Console.WriteLine($"[{idx}] {host}");
+}
+
+foreach (var (h, ms) in hosts.Zip(latencies))
+{
+    Console.WriteLine($"{h} -> {ms}ms");
+}
+
+// Call: // Runs directly as top-level or inside a method body`
+            },
+            py: {
+              title: "enumerate() & Strict Parallel zip()",
+              scope: "SNIPPET",
+              desc: "enumerate yields (index, value); zip(..., strict=True) raises ValueError on length mismatch.",
+              code: `hosts: list[str] = ["alpha", "beta", "gamma"]
+latencies: list[int] = [12, 19, 8]
+
+for idx, host in enumerate(hosts):
+    print(f"[{idx}] {host}")
+
+for h, ms in zip(hosts, latencies, strict=True):
+    print(f"{h} -> {ms}ms")
+
+# Call: # Runs directly in script or function body`
+            }
+          }
+        ]
+      },
+      {
+        id: "functions",
+        title: "04 // FUNCTIONS, GENERATORS (YIELD) & OOP / RECORDS",
+        subtitle: "First-class functions, lazy streams, immutable data records, and interfaces",
+        rows: [
+          {
+            cs: {
+              title: "Default Params, params Array & Func<T> Lambdas",
+              scope: "FUNCTION / METHOD",
+              desc: "Strongly typed delegates (Func<>, Action<>) and variable-length argument arrays.",
+              code: `using System;
+using System.Linq;
+
+public static int ComputeWeightedSum(int multiplier = 2, params int[] values)
+{
+    Func<int, int> scale = x => x * multiplier;
+    return values.Select(scale).Sum();
+}
+
+// Call: Console.WriteLine(ComputeWeightedSum(3, 10, 20, 30)); // 180`
+            },
+            py: {
+              title: "Default Args, *args / **kwargs & Callable Lambdas",
+              scope: "FUNCTION / METHOD",
+              desc: "Never use mutable defaults (like def fn(x=[])). Use None and initialize inside.",
+              code: `from typing import Callable
+
+def compute_weighted_sum(multiplier: int = 2, *values: int, **meta: str) -> int:
+    scale: Callable[[int], int] = lambda x: x * multiplier
+    return sum(scale(v) for v in values)
+
+# Call: print(compute_weighted_sum(3, 10, 20, 30, env="prod")) # 180`
+            }
+          },
+          {
+            cs: {
+              title: "Lazy Generator Streams with IEnumerable<T> & yield return",
+              scope: "FUNCTION / METHOD",
+              desc: "State-machine iterator yielding elements on-demand with O(1) memory overhead.",
+              code: `using System.Collections.Generic;
+
+public static IEnumerable<long> FibonacciStream(int count)
+{
+    long a = 0, b = 1;
+    for (int i = 0; i < count; i++)
+    {
+        yield return a;
+        (a, b) = (b, a + b);
+    }
+}
+
+// Call: Console.WriteLine(string.Join(", ", FibonacciStream(8)));`
+            },
+            py: {
+              title: "Lazy Generator Functions with yield & Iterator<T>",
+              scope: "FUNCTION / METHOD",
+              desc: "Pauses execution frame at each yield; ideal for streaming large files or infinite sequences.",
+              code: `from collections.abc import Iterator
+
+def fibonacci_stream(count: int) -> Iterator[int]:
+    a, b = 0, 1
+    for _ in range(count):
+        yield a
+        a, b = b, a + b
+
+# Call: print(list(fibonacci_stream(8)))`
+            }
+          },
+          {
+            cs: {
+              title: "Interfaces, Primary Constructors & Immutable Records",
+              scope: "CLASS / MODULE",
+              desc: "Records automatically synthesize value-based equality, hashing, and formatting.",
+              code: `public interface ITelemetryNode
+{
+    string EmitMetric();
+}
+
+public readonly record struct GeoPoint(double Lat, double Lon);
+
+public sealed class SensorNode(string id, GeoPoint location) : ITelemetryNode
+{
+    public string Id { get; } = id;
+    public GeoPoint Location { get; } = location;
+    public string EmitMetric() => $"NODE[{Id}] @ ({Location.Lat}, {Location.Lon})";
+}
+
+// Call: Console.WriteLine(new SensorNode("S-01", new GeoPoint(37.2, -93.2)).EmitMetric());`
+            },
+            py: {
+              title: "Protocols, @dataclass(frozen=True) & Classes",
+              scope: "CLASS / MODULE",
+              desc: "Frozen dataclasses provide hashable immutability and auto-generated __init__, __repr__, and __eq__.",
+              code: `from dataclasses import dataclass
+from typing import Protocol
+
+class TelemetryNode(Protocol):
+    def emit_metric(self) -> str: ...
+
+@dataclass(frozen=True, slots=True)
+class GeoPoint:
+    lat: float
+    lon: float
+
+class SensorNode:
+    def __init__(self, node_id: str, location: GeoPoint) -> None:
+        self.id = node_id
+        self.location = location
+
+    def emit_metric(self) -> str:
+        return f"NODE[{self.id}] @ ({self.location.lat}, {self.location.lon})"
+
+# Call: print(SensorNode("S-01", GeoPoint(37.2, -93.2)).emit_metric())`
+            }
+          }
+        ]
+      },
+      {
+        id: "collections",
+        title: "05 // COLLECTIONS, LINQ VS. COMPREHENSIONS & HASH MAPS",
+        subtitle: "Declarative filtering, projection, multi-key sorting, and frequency counting",
+        rows: [
+          {
+            cs: {
+              title: "LINQ Filter, Map, Multi-Key Sort & Aggregation",
+              scope: "SNIPPET",
+              desc: "Deferred execution pipelines over IEnumerable<T> with OrderBy / ThenByDescending.",
+              code: `using System.Linq;
+
+int[] nums = [5, 2, 8, 1, 9, 4, 2];
+
+int[] evenSquares = nums
+    .Where(x => x % 2 == 0)
+    .Select(x => x * x)
+    .ToArray();
+
+var ranked = nums
+    .Distinct()
+    .OrderBy(x => x % 2)           // Evens first
+    .ThenByDescending(x => x)     // Largest to smallest
+    .ToList();
+
+// Call: Console.WriteLine($"Squares: {string.Join(",", evenSquares)} | Ranked: {string.Join(",", ranked)}");`
+            },
+            py: {
+              title: "List Comprehensions & Tuple-Key Timsort",
+              scope: "SNIPPET",
+              desc: "Comprehensions replace map/filter; tuple keys handle multi-criteria sorting in O(n log n).",
+              code: `nums: list[int] = [5, 2, 8, 1, 9, 4, 2]
+
+even_squares: list[int] = [x * x for x in nums if x % 2 == 0]
+
+# Sort by (x % 2 ascending, then value descending via negation)
+ranked: list[int] = sorted(set(nums), key=lambda x: (x % 2, -x))
+
+# Call: print(f"Squares: {even_squares} | Ranked: {ranked}")`
+            }
+          },
+          {
+            cs: {
+              title: "Dictionary<K,V>, Safe Lookup & Frequency Counting",
+              scope: "SNIPPET",
+              desc: "CollectionsMarshal.GetValueRefOrAddDefault or TryGetValue prevents double hash lookups.",
+              code: `using System.Collections.Generic;
+
+var freq = new Dictionary<char, int>();
+string payload = "abracadabra";
+
+foreach (char c in payload)
+{
+    freq[c] = freq.GetValueOrDefault(c, 0) + 1;
+}
+
+int countZ = freq.TryGetValue('z', out int val) ? val : -1;
+
+// Call: Console.WriteLine($"'a' count: {freq['a']}, 'z' fallback: {countZ}");`
+            },
+            py: {
+              title: "dict, defaultdict(int) & collections.Counter",
+              scope: "SNIPPET",
+              desc: "Counter builds frequency maps in C-optimized O(n); defaultdict(int) avoids KeyError checks.",
+              code: `from collections import Counter, defaultdict
+
+payload: str = "abracadabra"
+freq: Counter[str] = Counter(payload)
+
+# Incremental grouping without key checks
+groups: defaultdict[int, list[str]] = defaultdict(list)
+for ch, count in freq.items():
+    groups[count].append(ch)
+
+count_z: int = freq.get("z", -1)
+
+# Call: print(f"'a' count: {freq['a']}, top 2: {freq.most_common(2)}, 'z': {count_z}")`
+            }
+          }
+        ]
+      },
+      {
+        id: "io_async",
+        title: "06 // RESOURCE MANAGEMENT, FILE I/O & ASYNC CONCURRENCY",
+        subtitle: "Deterministic disposal (IDisposable vs Context Manager) and non-blocking Task/Coroutine execution",
+        rows: [
+          {
+            cs: {
+              title: "Exception Guard & Deterministic using Statement",
+              scope: "FUNCTION / METHOD",
+              desc: "using guarantees Dispose() is called even when exceptions occur inside the block.",
+              code: `using System;
+using System.IO;
+using System.Text;
+
+public static string WriteAndReadTempLog(string path, string line)
+{
+    try
+    {
+        using (var sw = new StreamWriter(path, append: false, Encoding.UTF8))
+        {
+            sw.WriteLine(line);
+        }
+        return File.ReadAllText(path).Trim();
+    }
+    catch (IOException ex)
+    {
+        return $"IO_ERR: {ex.Message}";
+    }
+}
+
+// Call: Console.WriteLine(WriteAndReadTempLog("test.log", "SYS_OK"));`
+            },
+            py: {
+              title: "try / except / finally & with Context Manager",
+              scope: "FUNCTION / METHOD",
+              desc: "with guarantees __exit__() closes the file descriptor regardless of raised exceptions.",
+              code: `from pathlib import Path
+
+def write_and_read_temp_log(path_str: str, line: str) -> str:
+    path = Path(path_str)
+    try:
+        with path.open("w", encoding="utf-8") as f:
+            f.write(f"{line}\\n")
+        return path.read_text(encoding="utf-8").strip()
+    except OSError as exc:
+        return f"IO_ERR: {exc}"
+
+# Call: print(write_and_read_temp_log("test.log", "SYS_OK"))`
+            }
+          },
+          {
+            cs: {
+              title: "Async / Await Parallel Fan-Out with Task.WhenAll",
+              scope: "FUNCTION / METHOD",
+              desc: "Concurrently awaits multiple non-blocking I/O tasks and aggregates results.",
+              code: `using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+public static async Task<int[]> RunProbesAsync(int[] delaysMs)
+{
+    async Task<int> ProbeAsync(int ms)
+    {
+        await Task.Delay(ms);
+        return ms * 2;
+    }
+
+    Task<int>[] tasks = delaysMs.Select(ProbeAsync).ToArray();
+    return await Task.WhenAll(tasks);
+}
+
+// Call: int[] res = await RunProbesAsync([10, 20, 30]); Console.WriteLine(string.Join(",", res));`
+            },
+            py: {
+              title: "Async / Await Coroutine Fan-Out with asyncio.gather",
+              scope: "FUNCTION / METHOD",
+              desc: "Schedules coroutines concurrently on the event loop and collects outputs in order.",
+              code: `import asyncio
+
+async def run_probes_async(delays_ms: list[int]) -> list[int]:
+    async def probe(ms: int) -> int:
+        await asyncio.sleep(ms / 1000.0)
+        return ms * 2
+
+    return list(await asyncio.gather(*(probe(d) for d in delays_ms)))
+
+# Call: print(asyncio.run(run_probes_async([10, 20, 30])))`
+            }
+          }
+        ]
+      },
+      {
+        id: "dsa_core",
+        title: "07 // DSA CORE: DEQUE, HEAPS, SETS & 2D MATRIX INIT",
+        subtitle: "Amortized O(1) queues, PriorityQueue vs heapq, and safe multidimensional matrix setup",
+        rows: [
+          {
+            cs: {
+              title: "2D Matrix Allocation: Rectangular [r,c] vs Jagged [r][c]",
+              scope: "SNIPPET",
+              desc: "Jagged arrays (int[][]) are faster in C# CLR loops and compatible with row-level sorting.",
+              code: `int rows = 3, cols = 4;
+
+// Contiguous rectangular 2D array
+int[,] rectGrid = new int[rows, cols];
+rectGrid[1, 2] = 99;
+
+// Independent jagged 2D array (preferred for DSA)
+int[][] jagged = new int[rows][];
+for (int r = 0; r < rows; r++)
+{
+    jagged[r] = new int[cols];
+}
+jagged[1][2] = 99;
+
+// Call: Console.WriteLine($"Rect: {rectGrid[1,2]}, Jagged: {jagged[1][2]}");`
+            },
+            py: {
+              title: "Safe 2D Matrix Allocation (Avoiding Shallow Row Trap)",
+              scope: "SNIPPET",
+              desc: "NEVER use [[0]*cols]*rows (all rows reference the same list object!). Always use a list comprehension.",
+              code: `rows, cols = 3, 4
+
+# CORRECT: Independent row lists via list comprehension
+grid: list[list[int]] = [[0] * cols for _ in range(rows)]
+grid[1][2] = 99
+
+# WRONG TRAP: bad = [[0] * cols] * rows (mutating bad[0][0] mutates all rows!)
+
+# Call: print(f"Grid row 1: {grid[1]}")`
+            }
+          },
+          {
+            cs: {
+              title: "Queue<T>, Stack<T> & Double-Ended LinkedList<T>",
+              scope: "SNIPPET",
+              desc: "Queue<T> and Stack<T> are O(1) circular buffers; LinkedList<T> supports O(1) head/tail ops.",
+              code: `using System.Collections.Generic;
+
+var queue = new Queue<int>();
+queue.Enqueue(10);
+int first = queue.Dequeue(); // O(1)
+
+var stack = new Stack<int>();
+stack.Push(99);
+int top = stack.Pop();       // O(1)
+
+var deque = new LinkedList<int>();
+deque.AddFirst(1);
+deque.AddLast(2);
+deque.RemoveFirst();         // O(1)
+
+// Call: Console.WriteLine($"First={first}, Top={top}, DequeTail={deque.Last!.Value}");`
+            },
+            py: {
+              title: "collections.deque for O(1) Queue, Stack & Rotation",
+              scope: "SNIPPET",
+              desc: "list.pop(0) is O(n)! Always use collections.deque for O(1) popleft(), appendleft(), and rotate().",
+              code: `from collections import deque
+
+dq: deque[int] = deque([10, 20, 30])
+dq.append(40)          # O(1) push right
+dq.appendleft(5)       # O(1) push left -> [5, 10, 20, 30, 40]
+left_val = dq.popleft()# O(1) pop left  -> 5
+right_val = dq.pop()   # O(1) pop right -> 40
+
+dq.rotate(-1)          # O(k) in-place left shift by 1 -> [20, 30, 10]
+
+# Call: print(f"Left={left_val}, Right={right_val}, Rotated={list(dq)}")`
+            }
+          },
+          {
+            cs: {
+              title: "Min-Heap & Max-Heap with PriorityQueue<TElement, TPriority>",
+              scope: "SNIPPET",
+              desc: ".NET 6+ PriorityQueue separates payload from priority; invert priority comparer or negate for Max-Heap.",
+              code: `using System.Collections.Generic;
+
+// Min-Heap (lowest priority dequeued first)
+var minHeap = new PriorityQueue<string, int>();
+minHeap.Enqueue("low_lat", 5);
+minHeap.Enqueue("high_lat", 50);
+string fastest = minHeap.Dequeue(); // "low_lat"
+
+// Max-Heap using reverse comparer
+var maxHeap = new PriorityQueue<string, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
+maxHeap.Enqueue("low_lat", 5);
+maxHeap.Enqueue("high_lat", 50);
+string slowest = maxHeap.Dequeue(); // "high_lat"
+
+// Call: Console.WriteLine($"Min: {fastest}, Max: {slowest}");`
+            },
+            py: {
+              title: "Min-Heap & Max-Heap with heapq",
+              scope: "SNIPPET",
+              desc: "heapq is a Min-Heap only. Negate numeric keys on both push and pop to simulate a Max-Heap.",
+              code: `import heapq
+
+# Min-Heap
+min_heap: list[tuple[int, str]] = []
+heapq.heappush(min_heap, (5, "low_lat"))
+heapq.heappush(min_heap, (50, "high_lat"))
+_, fastest = heapq.heappop(min_heap)  # "low_lat"
+
+# Max-Heap via negated priority
+max_heap: list[tuple[int, str]] = []
+heapq.heappush(max_heap, (-5, "low_lat"))
+heapq.heappush(max_heap, (-50, "high_lat"))
+neg_p, slowest = heapq.heappop(max_heap)  # priority = -neg_p (50), "high_lat"
+
+# Call: print(f"Min: {fastest}, Max: {slowest} ({-neg_p})")`
+            }
+          }
+        ]
+      },
+      {
+        id: "dsa_hard",
+        title: "08 // ADVANCED DSA: LEFT-TURN ARRAYS, MATRICES, MONOTONIC STACK, DIJKSTRA & TRIE",
+        subtitle: "In-place 1D/2D left rotations, directional turn matrices, CCW orientation, graphs, and prefix trees",
+        rows: [
+          {
+            cs: {
+              title: "1D Array Left-Rotate by K (In-Place O(n) Time, O(1) Space)",
+              scope: "FUNCTION / METHOD",
+              desc: "Three-reversal algorithm shifts array elements left by K positions in-place without extra memory.",
+              code: `using System;
+
+public static void LeftRotateArrayInPlace(int[] arr, int k)
+{
+    if (arr.Length <= 1) return;
+    k %= arr.Length;
+    if (k < 0) k += arr.Length;
+
+    Array.Reverse(arr, 0, k);
+    Array.Reverse(arr, k, arr.Length - k);
+    Array.Reverse(arr, 0, arr.Length);
+}
+
+// Call: int[] a = [1, 2, 3, 4, 5, 6, 7]; LeftRotateArrayInPlace(a, 2); Console.WriteLine(string.Join(",", a)); // 3,4,5,6,7,1,2`
+            },
+            py: {
+              title: "1D Array Left-Rotate by K (In-Place Reversal & Slice)",
+              scope: "FUNCTION / METHOD",
+              desc: "Includes both O(1) auxiliary space in-place segment reversal and Pythonic slice rotation.",
+              code: `def left_rotate_array_in_place(arr: list[int], k: int) -> None:
+    n = len(arr)
+    if n <= 1:
+        return
+    k %= n
+
+    def rev(l: int, r: int) -> None:
+        while l < r:
+            arr[l], arr[r] = arr[r], arr[l]
+            l += 1
+            r -= 1
+
+    rev(0, k - 1)
+    rev(k, n - 1)
+    rev(0, n - 1)
+
+# Call: a = [1, 2, 3, 4, 5, 6, 7]; left_rotate_array_in_place(a, 2); print(a) # [3, 4, 5, 6, 7, 1, 2]`
+            }
+          },
+          {
+            cs: {
+              title: "2D Matrix 90° Left-Turn (Counter-Clockwise) In-Place Rotation",
+              scope: "FUNCTION / METHOD",
+              desc: "For an N x N matrix: 1) Reverse each row horizontally, 2) Transpose across main diagonal (or Transpose then reverse columns).",
+              code: `using System;
+
+public static void RotateMatrixLeft90(int[][] matrix)
+{
+    int n = matrix.Length;
+    // Step 1: Reverse each row left-to-right
+    for (int r = 0; r < n; r++)
+    {
+        Array.Reverse(matrix[r]);
+    }
+    // Step 2: Transpose across main diagonal (swap [r][c] with [c][r])
+    for (int r = 0; r < n; r++)
+    {
+        for (int c = r + 1; c < n; c++)
+        {
+            (matrix[r][c], matrix[c][r]) = (matrix[c][r], matrix[r][c]);
+        }
+    }
+}
+
+// Call: int[][] m = [[1,2,3],[4,5,6],[7,8,9]]; RotateMatrixLeft90(m); Console.WriteLine(string.Join(" | ", Array.ConvertAll(m, r => string.Join(",", r)))); // 3,6,9 | 2,5,8 | 1,4,7`
+            },
+            py: {
+              title: "2D Matrix 90° Left-Turn (Counter-Clockwise) In-Place & One-Liner",
+              scope: "FUNCTION / METHOD",
+              desc: "In-place O(1) space NxN rotation (Reverse rows + Transpose) plus rectangular zip(*m) one-liner.",
+              code: `def rotate_matrix_left_90(matrix: list[list[int]]) -> None:
+    n = len(matrix)
+    # Step 1: Reverse each row
+    for row in matrix:
+        row.reverse()
+    # Step 2: Transpose in-place
+    for r in range(n):
+        for c in range(r + 1, n):
+            matrix[r][c], matrix[c][r] = matrix[c][r], matrix[r][c]
+
+# Rectangular / functional 1-liner: list(map(list, zip(*matrix)))[::-1]
+# Call: m = [[1,2,3],[4,5,6],[7,8,9]]; rotate_matrix_left_90(m); print(m) # [[3,6,9], [2,5,8], [1,4,7]]`
+            }
+          },
+          {
+            cs: {
+              title: "2D Grid Directional Turn Traversal (Counter-Clockwise Left-Turn Spiral)",
+              scope: "FUNCTION / METHOD",
+              desc: "Uses direction state vectors (Down, Right, Up, Left) where (dir + 1) % 4 executes a 90° Left Turn whenever hitting a boundary or visited cell.",
+              code: `using System.Collections.Generic;
+
+public static List<int> LeftTurnSpiralOrder(int[][] grid)
+{
+    int rows = grid.Length, cols = grid[0].Length;
+    bool[,] seen = new bool[rows, cols];
+    // CCW Left-Turn vectors: Down(1,0) -> Right(0,1) -> Up(-1,0) -> Left(0,-1)
+    int[] dr = [1, 0, -1, 0];
+    int[] dc = [0, 1, 0, -1];
+    int r = 0, c = 0, dir = 0;
+    var result = new List<int>(rows * cols);
+
+    for (int i = 0; i < rows * cols; i++)
+    {
+        result.Add(grid[r][c]);
+        seen[r, c] = true;
+        int nr = r + dr[dir], nc = c + dc[dir];
+        if (nr < 0 || nr >= rows || nc < 0 || nc >= cols || seen[nr, nc])
+        {
+            dir = (dir + 1) % 4; // Execute 90-degree Left Turn
+            nr = r + dr[dir];
+            nc = c + dc[dir];
+        }
+        r = nr; c = nc;
+    }
+    return result;
+}
+
+// Call: Console.WriteLine(string.Join(",", LeftTurnSpiralOrder([[1,2,3],[4,5,6],[7,8,9]]))); // 1,4,7,8,9,6,3,2,5`
+            },
+            py: {
+              title: "2D Grid Directional Turn Traversal (CCW Left-Turn Vector Math)",
+              scope: "FUNCTION / METHOD",
+              desc: "In 2D grid coordinates (row down, col right), rotating vector (dr, dc) -> (-dc, dr) performs an exact 90° Counter-Clockwise Left Turn.",
+              code: `def left_turn_spiral_order(grid: list[list[int]]) -> list[int]:
+    rows, cols = len(grid), len(grid[0])
+    seen: set[tuple[int, int]] = set()
+    r, c = 0, 0
+    dr, dc = 1, 0  # Start heading Down; left-turn transform is (dr, dc) = (-dc, dr)
+    result: list[int] = []
+
+    for _ in range(rows * cols):
+        result.append(grid[r][c])
+        seen.add((r, c))
+        nr, nc = r + dr, c + dc
+        if not (0 <= nr < rows and 0 <= nc < cols) or (nr, nc) in seen:
+            dr, dc = -dc, dr  # 90-degree Left Turn (Down->Right->Up->Left)
+            nr, nc = r + dr, c + dc
+        r, c = nr, nc
+    return result
+
+# Call: print(left_turn_spiral_order([[1,2,3],[4,5,6],[7,8,9]])) # [1, 4, 7, 8, 9, 6, 3, 2, 5]`
+            }
+          },
+          {
+            cs: {
+              title: "Geometric Left-Turn (CCW Cross Product) & Convex Hull Primitive",
+              scope: "FUNCTION / METHOD",
+              desc: "2D Cross Product of vectors AB and AC: > 0 is a strict Left Turn (counter-clockwise), < 0 is Right Turn, 0 is Collinear.",
+              code: `public static int TurnOrientation((long X, long Y) a, (long X, long Y) b, (long X, long Y) c)
+{
+    long cross = (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X);
+    if (cross > 0) return 1;  // Strict LEFT TURN (Counter-Clockwise)
+    if (cross < 0) return -1; // Strict RIGHT TURN (Clockwise)
+    return 0;                 // Collinear
+}
+
+// Call: Console.WriteLine(TurnOrientation((0, 0), (4, 0), (4, 4))); // 1 (Left Turn)`
+            },
+            py: {
+              title: "Geometric Left-Turn (CCW Cross Product) & Monotone Chain Check",
+              scope: "FUNCTION / METHOD",
+              desc: "Fundamental primitive for Graham Scan / Andrew's Monotone Chain Convex Hull and line segment intersection.",
+              code: `Point = tuple[int, int]
+
+def turn_orientation(a: Point, b: Point, c: Point) -> int:
+    cross = (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+    if cross > 0:
+        return 1   # Strict LEFT TURN (Counter-Clockwise)
+    if cross < 0:
+        return -1  # Strict RIGHT TURN (Clockwise)
+    return 0       # Collinear
+
+# Call: print(turn_orientation((0, 0), (4, 0), (4, 4))) # 1 (Left Turn)`
+            }
+          },
+          {
+            cs: {
+              title: "Monotonic Stack: Next Greater Element in O(n)",
+              scope: "FUNCTION / METHOD",
+              desc: "Maintains a decreasing stack of unresolved indices; resolves whenever current value exceeds stack top.",
+              code: `using System;
+using System.Collections.Generic;
+
+public static int[] NextGreaterElements(int[] nums)
+{
+    int[] res = new int[nums.Length];
+    Array.Fill(res, -1);
+    var stack = new Stack<int>(); // Stores indices
+
+    for (int i = 0; i < nums.Length; i++)
+    {
+        while (stack.Count > 0 && nums[i] > nums[stack.Peek()])
+        {
+            res[stack.Pop()] = nums[i];
+        }
+        stack.Push(i);
+    }
+    return res;
+}
+
+// Call: Console.WriteLine(string.Join(",", NextGreaterElements([2, 1, 2, 4, 3]))); // 4,2,4,-1,-1`
+            },
+            py: {
+              title: "Monotonic Stack: Next Greater Element in O(n)",
+              scope: "FUNCTION / METHOD",
+              desc: "Each index is pushed and popped at most once, guaranteeing O(n) time and O(n) space.",
+              code: `def next_greater_elements(nums: list[int]) -> list[int]:
+    res = [-1] * len(nums)
+    stack: list[int] = []  # Stores unresolved indices
+
+    for i, val in enumerate(nums):
+        while stack and val > nums[stack[-1]]:
+            res[stack.pop()] = val
+        stack.append(i)
+    return res
+
+# Call: print(next_greater_elements([2, 1, 2, 4, 3])) # [4, 2, 4, -1, -1]`
+            }
+          },
+          {
+            cs: {
+              title: "Dijkstra's Shortest Path (Weighted Graph) in O((V + E) log V)",
+              scope: "FUNCTION / METHOD",
+              desc: "Uses PriorityQueue<int, int> and skips stale heap entries via dist > minDist[u] guard.",
+              code: `using System;
+using System.Collections.Generic;
+
+public static int[] Dijkstra(int n, List<(int To, int Weight)>[] adj, int src)
+{
+    int[] dist = new int[n];
+    Array.Fill(dist, int.MaxValue);
+    dist[src] = 0;
+
+    var pq = new PriorityQueue<int, int>();
+    pq.Enqueue(src, 0);
+
+    while (pq.TryDequeue(out int u, out int d))
+    {
+        if (d > dist[u]) continue; // Skip stale entry
+        foreach (var (v, w) in adj[u])
+        {
+            if (dist[u] + w < dist[v])
+            {
+                dist[v] = dist[u] + w;
+                pq.Enqueue(v, dist[v]);
+            }
+        }
+    }
+    return dist;
+}
+
+// Call: var g = new List<(int,int)>[]{ [(1,4),(2,1)], [(3,1)], [(1,2),(3,5)], [] }; Console.WriteLine(string.Join(",", Dijkstra(4, g, 0))); // 0,3,1,4`
+            },
+            py: {
+              title: "Dijkstra's Shortest Path (Weighted Graph) in O((V + E) log V)",
+              scope: "FUNCTION / METHOD",
+              desc: "Uses heapq with (cost, node) tuples and ignores outdated entries where d > dist[u].",
+              code: `import heapq
+
+def dijkstra(n: int, adj: list[list[tuple[int, int]]], src: int) -> list[float]:
+    dist: list[float] = [float("inf")] * n
+    dist[src] = 0
+    pq: list[tuple[float, int]] = [(0, src)]
+
+    while pq:
+        d, u = heapq.heappop(pq)
+        if d > dist[u]:
+            continue
+        for v, weight in adj[u]:
+            if dist[u] + weight < dist[v]:
+                dist[v] = dist[u] + weight
+                heapq.heappush(pq, (dist[v], v))
+    return dist
+
+# Call: g = [[(1,4),(2,1)], [(3,1)], [(1,2),(3,5)], []]; print(dijkstra(4, g, 0)) # [0, 3, 1, 4]`
+            }
+          },
+          {
+            cs: {
+              title: "Disjoint Set (Union-Find) with Path Compression & Rank",
+              scope: "CLASS / MODULE",
+              desc: "Near-constant O(alpha(N)) connected component queries and cycle detection.",
+              code: `using System.Linq;
+
+public sealed class UnionFind(int n)
+{
+    private readonly int[] _parent = Enumerable.Range(0, n).ToArray();
+    private readonly int[] _rank = new int[n];
+
+    public int Find(int i) => _parent[i] == i ? i : (_parent[i] = Find(_parent[i]));
+
+    public bool Union(int a, int b)
+    {
+        int rootA = Find(a), rootB = Find(b);
+        if (rootA == rootB) return false;
+        if (_rank[rootA] < _rank[rootB]) (rootA, rootB) = (rootB, rootA);
+        _parent[rootB] = rootA;
+        if (_rank[rootA] == _rank[rootB]) _rank[rootA]++;
+        return true;
+    }
+}
+
+// Call: var uf = new UnionFind(5); uf.Union(0, 1); uf.Union(1, 2); Console.WriteLine(uf.Find(0) == uf.Find(2)); // True`
+            },
+            py: {
+              title: "Disjoint Set (Union-Find) with Path Compression & Rank",
+              scope: "CLASS / MODULE",
+              desc: "Tracks connected components and merges disjoint trees in O(alpha(N)) amortized time.",
+              code: `class UnionFind:
+    def __init__(self, n: int) -> None:
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, i: int) -> int:
+        if self.parent[i] != i:
+            self.parent[i] = self.find(self.parent[i])
+        return self.parent[i]
+
+    def union(self, a: int, b: int) -> bool:
+        ra, rb = self.find(a), self.find(b)
+        if ra == rb:
+            return False
+        if self.rank[ra] < self.rank[rb]:
+            ra, rb = rb, ra
+        self.parent[rb] = ra
+        if self.rank[ra] == self.rank[rb]:
+            self.rank[ra] += 1
+        return True
+
+# Call: uf = UnionFind(5); uf.union(0, 1); uf.union(1, 2); print(uf.find(0) == uf.find(2)) # True`
+            }
+          },
+          {
+            cs: {
+              title: "Prefix Tree (Trie) for O(L) Word & Prefix Search",
+              scope: "CLASS / MODULE",
+              desc: "Insert, exact match, and prefix match in O(L) time where L is string length.",
+              code: `using System.Collections.Generic;
+
+public sealed class Trie
+{
+    private readonly Dictionary<char, Trie> _children = new();
+    private bool _isEnd;
+
+    public void Insert(string word)
+    {
+        Trie curr = this;
+        foreach (char c in word)
+        {
+            if (!curr._children.TryGetValue(c, out Trie? next))
+                curr._children[c] = next = new Trie();
+            curr = next;
+        }
+        curr._isEnd = true;
+    }
+
+    public bool Search(string word, bool prefixOnly = false)
+    {
+        Trie curr = this;
+        foreach (char c in word)
+        {
+            if (!curr._children.TryGetValue(c, out Trie? next)) return false;
+            curr = next;
+        }
+        return prefixOnly || curr._isEnd;
+    }
+}
+
+// Call: var t = new Trie(); t.Insert("matrix"); Console.WriteLine($"{t.Search("mat", true)}, {t.Search("mat")}"); // True, False`
+            },
+            py: {
+              title: "Prefix Tree (Trie) for O(L) Word & Prefix Search",
+              scope: "CLASS / MODULE",
+              desc: "Compact dictionary-backed Trie supporting O(L) insert, exact search, and prefix lookup.",
+              code: `class Trie:
+    def __init__(self) -> None:
+        self.children: dict[str, Trie] = {}
+        self.is_end: bool = False
+
+    def insert(self, word: str) -> None:
+        curr = self
+        for ch in word:
+            curr = curr.children.setdefault(ch, Trie())
+        curr.is_end = True
+
+    def search(self, word: str, prefix_only: bool = False) -> bool:
+        curr = self
+        for ch in word:
+            if ch not in curr.children:
+                return False
+            curr = curr.children[ch]
+        return True if prefix_only else curr.is_end
+
+# Call: t = Trie(); t.insert("matrix"); print(t.search("mat", True), t.search("mat")) # True False`
+            }
+          }
+        ]
+      },
+      {
+        id: "dsa_more",
+        title: "09 // DSA: LINKED LISTS, TREES & GRAPH TRAVERSALS",
+        subtitle: "Pointer-based structures, traversal patterns, and the .NET/Python collection differences",
+        rows: [
+          {
+            cs: {
+              title: "Singly Linked List: Insert, Search & Remove",
+              scope: "CLASS / MODULE",
+              desc: "A node stores a value and next reference. Head insertion, search, and removal are O(1) or O(n) as appropriate.",
+              code: `public sealed class SinglyLinkedList<T>
+{
+    private sealed class Node(T value, Node? next)
+    {
+        public T Value = value;
+        public Node? Next = next;
+    }
+
+    private Node? _head;
+
+    public void AddFirst(T value) => _head = new Node(value, _head);
+
+    public bool Contains(T value)
+    {
+        for (Node? node = _head; node is not null; node = node.Next)
+            if (EqualityComparer<T>.Default.Equals(node.Value, value)) return true;
+        return false;
+    }
+
+    public bool RemoveFirst(T value)
+    {
+        if (_head is null) return false;
+        if (EqualityComparer<T>.Default.Equals(_head.Value, value))
+        {
+            _head = _head.Next;
+            return true;
+        }
+        for (Node? node = _head; node?.Next is not null; node = node.Next)
+        {
+            if (!EqualityComparer<T>.Default.Equals(node.Next.Value, value)) continue;
+            node.Next = node.Next.Next;
+            return true;
+        }
+        return false;
+    }
+}`
+            },
+            py: {
+              title: "Singly Linked List: Insert, Search & Remove",
+              scope: "CLASS / MODULE",
+              desc: "Python references and dataclasses make the node explicit; the same linked-list operation costs apply.",
+              code: `from dataclasses import dataclass
+from typing import Generic, TypeVar
+
+T = TypeVar("T")
+
+@dataclass
+class _Node(Generic[T]):
+    value: T
+    next: "_Node[T] | None" = None
+
+class SinglyLinkedList(Generic[T]):
+    def __init__(self) -> None:
+        self.head: _Node[T] | None = None
+
+    def add_first(self, value: T) -> None:
+        self.head = _Node(value, self.head)
+
+    def contains(self, value: T) -> bool:
+        node = self.head
+        while node is not None:
+            if node.value == value:
+                return True
+            node = node.next
+        return False
+
+    def remove_first(self, value: T) -> bool:
+        if self.head is None:
+            return False
+        if self.head.value == value:
+            self.head = self.head.next
+            return True
+        node = self.head
+        while node.next is not None:
+            if node.next.value == value:
+                node.next = node.next.next
+                return True
+            node = node.next
+        return False`
+            }
+          },
+          {
+            cs: {
+              title: "Doubly Linked List: Walk Both Ways",
+              scope: "CLASS / MODULE",
+              desc: "Each node links both directions. .NET LinkedList<T> is already doubly linked; retain node handles for O(1) removal.",
+              code: `using System.Collections.Generic;
+
+var list = new LinkedList<string>();
+LinkedListNode<string> first = list.AddLast("alpha");
+list.AddLast("beta");
+list.AddFirst("start");
+
+// Forward traversal
+for (var node = list.First; node is not null; node = node.Next)
+    Console.WriteLine(node.Value);
+
+// Backward traversal and O(1) removal with a node handle
+for (var node = list.Last; node is not null; node = node.Previous)
+    Console.WriteLine(node.Value);
+list.Remove(first); // O(1); finding the node by value would take O(n)`
+            },
+            py: {
+              title: "Doubly Linked List: Custom Node Links",
+              scope: "CLASS / MODULE",
+              desc: "The standard library deque is usually preferable; this minimal node example shows previous/next links and O(1) unlink.",
+              code: `from dataclasses import dataclass
+
+@dataclass
+class Node:
+    value: str
+    previous: "Node | None" = None
+    next: "Node | None" = None
+
+def unlink(node: Node) -> None:
+    if node.previous is not None:
+        node.previous.next = node.next
+    if node.next is not None:
+        node.next.previous = node.previous
+    node.previous = node.next = None
+
+first = Node("alpha")
+second = Node("beta", previous=first)
+first.next = second
+unlink(second)  # O(1) when the node is already known`
+            }
+          },
+          {
+            cs: {
+              title: "Binary Search Tree: Insert & Lookup",
+              scope: "CLASS / MODULE",
+              desc: "A BST orders smaller values left and larger values right; average O(log n), worst-case O(n) without balancing.",
+              code: `public sealed class BstNode(int value)
+{
+    public int Value = value;
+    public BstNode? Left;
+    public BstNode? Right;
+
+    public BstNode Insert(int value)
+    {
+        if (value < Value) Left = Left is null ? new(value) : Left.Insert(value);
+        else if (value > Value) Right = Right is null ? new(value) : Right.Insert(value);
+        return this;
+    }
+
+    public bool Contains(int value) =>
+        value == Value || (value < Value
+            ? Left?.Contains(value) ?? false
+            : Right?.Contains(value) ?? false);
+}
+
+// Call: var root = new BstNode(8); root.Insert(3).Insert(10); Console.WriteLine(root.Contains(10));`
+            },
+            py: {
+              title: "Binary Search Tree: Insert & Lookup",
+              scope: "CLASS / MODULE",
+              desc: "Python objects hold child references. For production ordered maps, use a balanced-tree library rather than a plain BST.",
+              code: `class BstNode:
+    def __init__(self, value: int) -> None:
+        self.value = value
+        self.left: BstNode | None = None
+        self.right: BstNode | None = None
+
+    def insert(self, value: int) -> None:
+        if value < self.value:
+            if self.left is None:
+                self.left = BstNode(value)
+            else:
+                self.left.insert(value)
+        elif value > self.value:
+            if self.right is None:
+                self.right = BstNode(value)
+            else:
+                self.right.insert(value)
+
+    def contains(self, value: int) -> bool:
+        if value == self.value:
+            return True
+        child = self.left if value < self.value else self.right
+        return child.contains(value) if child else False
+
+# Call: root = BstNode(8); root.insert(3); root.insert(10); print(root.contains(10))`
+            }
+          },
+          {
+            cs: {
+              title: "Tree Traversals: Inorder, Preorder & Postorder",
+              scope: "FUNCTION / METHOD",
+              desc: "Recursive DFS orders differ by when the current node is visited; inorder on a BST yields sorted values.",
+              code: `static void Inorder(BstNode? node, List<int> output)
+{
+    if (node is null) return;
+    Inorder(node.Left, output);
+    output.Add(node.Value);
+    Inorder(node.Right, output);
+}
+
+static void Preorder(BstNode? node, List<int> output)
+{
+    if (node is null) return;
+    output.Add(node.Value);
+    Preorder(node.Left, output);
+    Preorder(node.Right, output);
+}
+
+// Postorder: recurse left, recurse right, then add node.Value.
+// Each traversal is O(n); recursion stack is O(h).`
+            },
+            py: {
+              title: "Tree Traversals: Inorder, Preorder & Postorder",
+              scope: "FUNCTION / METHOD",
+              desc: "The traversal order is language-independent; Python lists collect output and recursion uses the call stack.",
+              code: `def inorder(node: BstNode | None, output: list[int]) -> None:
+    if node is None:
+        return
+    inorder(node.left, output)
+    output.append(node.value)
+    inorder(node.right, output)
+
+def preorder(node: BstNode | None, output: list[int]) -> None:
+    if node is None:
+        return
+    output.append(node.value)
+    preorder(node.left, output)
+    preorder(node.right, output)
+
+# Postorder: recurse left, recurse right, then append node.value.
+# Each traversal is O(n); recursion stack is O(h).`
+            }
+          },
+          {
+            cs: {
+              title: "Breadth-First Search (BFS) on an Adjacency List",
+              scope: "FUNCTION / METHOD",
+              desc: "Queue-based traversal visits vertices by distance in an unweighted graph. Mark nodes when enqueued.",
+              code: `using System.Collections.Generic;
+
+static List<int> Bfs(List<int>[] graph, int start)
+{
+    var order = new List<int>();
+    var seen = new bool[graph.Length];
+    var queue = new Queue<int>();
+    seen[start] = true;
+    queue.Enqueue(start);
+    while (queue.Count > 0)
+    {
+        int node = queue.Dequeue();
+        order.Add(node);
+        foreach (int next in graph[node])
+            if (!seen[next]) { seen[next] = true; queue.Enqueue(next); }
+    }
+    return order;
+}`
+            },
+            py: {
+              title: "Breadth-First Search (BFS) on an Adjacency List",
+              scope: "FUNCTION / METHOD",
+              desc: "Use deque, not list.pop(0), for O(1) queue removal. Mark nodes when enqueued to avoid duplicate work.",
+              code: `from collections import deque
+
+def bfs(graph: list[list[int]], start: int) -> list[int]:
+    order: list[int] = []
+    seen = {start}
+    queue = deque([start])
+    while queue:
+        node = queue.popleft()
+        order.append(node)
+        for neighbor in graph[node]:
+            if neighbor not in seen:
+                seen.add(neighbor)
+                queue.append(neighbor)
+    return order
+
+# Time: O(V + E); space: O(V).`
+            }
+          },
+          {
+            cs: {
+              title: "Depth-First Search (DFS) for Reachability",
+              scope: "FUNCTION / METHOD",
+              desc: "Iterative DFS uses an explicit stack and avoids recursion-depth limits on large inputs.",
+              code: `static bool DfsReachable(List<int>[] graph, int start, int target)
+{
+    var seen = new bool[graph.Length];
+    var stack = new Stack<int>();
+    stack.Push(start);
+    while (stack.Count > 0)
+    {
+        int node = stack.Pop();
+        if (node == target) return true;
+        if (seen[node]) continue;
+        seen[node] = true;
+        foreach (int next in graph[node])
+            if (!seen[next]) stack.Push(next);
+    }
+    return false;
+}`
+            },
+            py: {
+              title: "Depth-First Search (DFS) for Reachability",
+              scope: "FUNCTION / METHOD",
+              desc: "A Python list is an efficient LIFO stack; use a set for visited vertices.",
+              code: `def dfs_reachable(graph: list[list[int]], start: int, target: int) -> bool:
+    seen: set[int] = set()
+    stack = [start]
+    while stack:
+        node = stack.pop()
+        if node == target:
+            return True
+        if node in seen:
+            continue
+        seen.add(node)
+        stack.extend(neighbor for neighbor in graph[node] if neighbor not in seen)
+    return False
+
+# Time: O(V + E); space: O(V).`
+            }
+          }
+        ]
+      },
+      {
+        id: "dsa_patterns",
+        title: "10 // DSA: SEARCH, WINDOWS, SORTING & DYNAMIC PROGRAMMING",
+        subtitle: "Reusable interview patterns with complexity notes and equivalent idioms",
+        rows: [
+          {
+            cs: {
+              title: "Binary Search: Lower Bound",
+              scope: "FUNCTION / METHOD",
+              desc: "Finds the first index whose value is >= target in a sorted array. O(log n) time, O(1) space.",
+              code: `static int LowerBound(int[] nums, int target)
+{
+    int lo = 0, hi = nums.Length;
+    while (lo < hi)
+    {
+        int mid = lo + (hi - lo) / 2;
+        if (nums[mid] < target) lo = mid + 1;
+        else hi = mid;
+    }
+    return lo;
+}
+
+// Call: LowerBound([1, 2, 2, 4], 2) returns 1`
+            },
+            py: {
+              title: "Binary Search: bisect_left",
+              scope: "FUNCTION / METHOD",
+              desc: "The standard bisect module implements the same lower-bound insertion point in O(log n).",
+              code: `from bisect import bisect_left
+
+def lower_bound(nums: list[int], target: int) -> int:
+    return bisect_left(nums, target)
+
+# Call: lower_bound([1, 2, 2, 4], 2) == 1
+# Manual binary search uses the same lo/hi invariant.`
+            }
+          },
+          {
+            cs: {
+              title: "Two Pointers: Pair Sum in a Sorted Array",
+              scope: "FUNCTION / METHOD",
+              desc: "Move the left or right endpoint based on the sum; O(n) time and O(1) auxiliary space.",
+              code: `static (int Left, int Right)? PairSum(int[] a, int target)
+{
+    int left = 0, right = a.Length - 1;
+    while (left < right)
+    {
+        int sum = a[left] + a[right];
+        if (sum == target) return (left, right);
+        if (sum < target) left++;
+        else right--;
+    }
+    return null;
+}`
+            },
+            py: {
+              title: "Two Pointers: Pair Sum in a Sorted Array",
+              scope: "FUNCTION / METHOD",
+              desc: "Tuple return is natural in Python; the sorted-input invariant makes each pointer move safe.",
+              code: `def pair_sum(a: list[int], target: int) -> tuple[int, int] | None:
+    left, right = 0, len(a) - 1
+    while left < right:
+        total = a[left] + a[right]
+        if total == target:
+            return left, right
+        if total < target:
+            left += 1
+        else:
+            right -= 1
+    return None`
+            }
+          },
+          {
+            cs: {
+              title: "Sliding Window: Maximum Sum of K Consecutive Values",
+              scope: "FUNCTION / METHOD",
+              desc: "Update a fixed-size window incrementally instead of resumming each range: O(n) time, O(1) space.",
+              code: `static int MaxWindowSum(int[] nums, int k)
+{
+    if (k <= 0 || k > nums.Length) throw new ArgumentOutOfRangeException(nameof(k));
+    int sum = 0;
+    for (int i = 0; i < k; i++) sum += nums[i];
+    int best = sum;
+    for (int right = k; right < nums.Length; right++)
+    {
+        sum += nums[right] - nums[right - k];
+        best = Math.Max(best, sum);
+    }
+    return best;
+}`
+            },
+            py: {
+              title: "Sliding Window: Maximum Sum of K Consecutive Values",
+              scope: "FUNCTION / METHOD",
+              desc: "Track the outgoing and incoming values; validate k to keep empty or oversized windows explicit.",
+              code: `def max_window_sum(nums: list[int], k: int) -> int:
+    if k <= 0 or k > len(nums):
+        raise ValueError("k must be between 1 and len(nums)")
+    window = sum(nums[:k])
+    best = window
+    for right in range(k, len(nums)):
+        window += nums[right] - nums[right - k]
+        best = max(best, window)
+    return best`
+            }
+          },
+          {
+            cs: {
+              title: "Prefix Sums: O(1) Range Sum Queries",
+              scope: "FUNCTION / METHOD",
+              desc: "prefix[i] stores the sum before index i; a half-open range [left, right) is prefix[right] - prefix[left].",
+              code: `static long[] BuildPrefix(int[] nums)
+{
+    var prefix = new long[nums.Length + 1];
+    for (int i = 0; i < nums.Length; i++)
+        prefix[i + 1] = prefix[i] + nums[i];
+    return prefix;
+}
+
+static long RangeSum(long[] prefix, int left, int right) =>
+    prefix[right] - prefix[left];
+
+// Build O(n), each range query O(1).`
+            },
+            py: {
+              title: "Prefix Sums: O(1) Range Sum Queries",
+              scope: "FUNCTION / METHOD",
+              desc: "Use an extra leading zero to make empty-prefix and half-open range arithmetic consistent.",
+              code: `def build_prefix(nums: list[int]) -> list[int]:
+    prefix = [0]
+    for value in nums:
+        prefix.append(prefix[-1] + value)
+    return prefix
+
+def range_sum(prefix: list[int], left: int, right: int) -> int:
+    return prefix[right] - prefix[left]
+
+# Build O(n), each [left, right) query O(1).`
+            }
+          },
+          {
+            cs: {
+              title: "Merge Sort: Stable O(n log n) Sorting",
+              scope: "FUNCTION / METHOD",
+              desc: "Divide, recursively sort, and merge; stable ordering with O(n) auxiliary memory.",
+              code: `static int[] MergeSort(int[] values)
+{
+    if (values.Length < 2) return (int[])values.Clone();
+    int mid = values.Length / 2;
+    int[] left = MergeSort(values[..mid]);
+    int[] right = MergeSort(values[mid..]);
+    var merged = new int[values.Length];
+    int i = 0, j = 0, k = 0;
+    while (i < left.Length && j < right.Length)
+        merged[k++] = left[i] <= right[j] ? left[i++] : right[j++];
+    while (i < left.Length) merged[k++] = left[i++];
+    while (j < right.Length) merged[k++] = right[j++];
+    return merged;
+}`
+            },
+            py: {
+              title: "Merge Sort: Stable O(n log n) Sorting",
+              scope: "FUNCTION / METHOD",
+              desc: "Python's built-in sorted() is usually preferred; this implementation illustrates the divide-and-merge algorithm.",
+              code: `def merge_sort(values: list[int]) -> list[int]:
+    if len(values) < 2:
+        return values.copy()
+    mid = len(values) // 2
+    left, right = merge_sort(values[:mid]), merge_sort(values[mid:])
+    merged: list[int] = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            merged.append(left[i])
+            i += 1
+        else:
+            merged.append(right[j])
+            j += 1
+    return merged + left[i:] + right[j:]
+
+# Time O(n log n), auxiliary space O(n).`
+            }
+          },
+          {
+            cs: {
+              title: "Dynamic Programming: 1D Fibonacci Tabulation",
+              scope: "FUNCTION / METHOD",
+              desc: "Replace repeated recursion with bottom-up state; keep only the previous two values for O(1) space.",
+              code: `static long Fib(int n)
+{
+    if (n < 0) throw new ArgumentOutOfRangeException(nameof(n));
+    long prev = 0, current = 1;
+    for (int i = 0; i < n; i++)
+        (prev, current) = (current, prev + current);
+    return prev;
+}
+
+// O(n) time, O(1) space; use BigInteger if values may exceed Int64.`
+            },
+            py: {
+              title: "Dynamic Programming: 1D Fibonacci Tabulation",
+              scope: "FUNCTION / METHOD",
+              desc: "Python integers grow as needed; the same rolling-state recurrence avoids a full DP table.",
+              code: `def fib(n: int) -> int:
+    if n < 0:
+        raise ValueError("n must be non-negative")
+    previous, current = 0, 1
+    for _ in range(n):
+        previous, current = current, previous + current
+    return previous
+
+# O(n) time, O(1) auxiliary space.`
+            }
+          },
+          {
+            cs: {
+              title: "Topological Sort: Kahn's Algorithm",
+              scope: "FUNCTION / METHOD",
+              desc: "For a directed acyclic graph, repeatedly emit zero-indegree nodes; fewer emitted nodes means a cycle exists.",
+              code: `static List<int>? TopologicalSort(List<int>[] graph)
+{
+    var indegree = new int[graph.Length];
+    foreach (var edges in graph)
+        foreach (int to in edges) indegree[to]++;
+    var queue = new Queue<int>(
+        Enumerable.Range(0, graph.Length).Where(i => indegree[i] == 0));
+    var order = new List<int>();
+    while (queue.Count > 0)
+    {
+        int node = queue.Dequeue();
+        order.Add(node);
+        foreach (int to in graph[node])
+            if (--indegree[to] == 0) queue.Enqueue(to);
+    }
+    return order.Count == graph.Length ? order : null;
+}`
+            },
+            py: {
+              title: "Topological Sort: Kahn's Algorithm",
+              scope: "FUNCTION / METHOD",
+              desc: "A DAG has a topological ordering; returning fewer than V nodes signals a directed cycle.",
+              code: `from collections import deque
+
+def topological_sort(graph: list[list[int]]) -> list[int] | None:
+    indegree = [0] * len(graph)
+    for edges in graph:
+        for target in edges:
+            indegree[target] += 1
+    queue = deque(i for i, degree in enumerate(indegree) if degree == 0)
+    order: list[int] = []
+    while queue:
+        node = queue.popleft()
+        order.append(node)
+        for target in graph[node]:
+            indegree[target] -= 1
+            if indegree[target] == 0:
+                queue.append(target)
+    return order if len(order) == len(graph) else None`
+            }
+          },
+          {
+            cs: {
+              title: "0/1 Knapsack: One-Dimensional DP",
+              scope: "FUNCTION / METHOD",
+              desc: "Process capacities downward so each item is used at most once; O(items × capacity) time.",
+              code: `static int Knapsack(int[] weights, int[] values, int capacity)
+{
+    var best = new int[capacity + 1];
+    for (int item = 0; item < weights.Length; item++)
+        for (int cap = capacity; cap >= weights[item]; cap--)
+            best[cap] = Math.Max(best[cap],
+                best[cap - weights[item]] + values[item]);
+    return best[capacity];
+}`
+            },
+            py: {
+              title: "0/1 Knapsack: One-Dimensional DP",
+              scope: "FUNCTION / METHOD",
+              desc: "Descending capacity iteration preserves the previous-item state; ascending order would allow item reuse.",
+              code: `def knapsack(weights: list[int], values: list[int], capacity: int) -> int:
+    best = [0] * (capacity + 1)
+    for weight, value in zip(weights, values, strict=True):
+        for cap in range(capacity, weight - 1, -1):
+            best[cap] = max(best[cap], best[cap - weight] + value)
+    return best[capacity]
+
+# Time O(n * capacity), space O(capacity).`
+            }
+          }
+        ]
+      },
+      {
+        id: "source_files",
+        title: "11 // SOURCE FILES: PROJECT SHAPE & COMMON TEMPLATES",
+        subtitle: "Searchable source-file examples: entry points, models, services, tests, JSON, and project metadata",
+        rows: [
+          {
+            cs: {
+              title: "Source File: Typical Project Layout",
+              scope: "WHOLE SCRIPT",
+              desc: "Source file project structure: separate app, domain, tests, and configuration instead of one oversized file.",
+              code: `MatrixCore/
+  MatrixCore.sln
+  src/MatrixCore.App/
+    MatrixCore.App.csproj
+    Program.cs
+    Models/Person.cs
+    Services/IGreetingService.cs
+    Services/GreetingService.cs
+  tests/MatrixCore.Tests/
+    MatrixCore.Tests.csproj
+    GreetingServiceTests.cs
+
+# Create: dotnet new sln -n MatrixCore
+# dotnet new console -n MatrixCore.App -o src/MatrixCore.App`
+            },
+            py: {
+              title: "Source File: Typical Package Layout",
+              scope: "WHOLE SCRIPT",
+              desc: "Source file project structure: package modules, tests, and pyproject metadata keep imports and tooling organized.",
+              code: `matrix_core/
+  pyproject.toml
+  src/matrix_core/
+    __init__.py
+    __main__.py
+    models/
+      __init__.py
+      person.py
+    services/
+      __init__.py
+      greeting_service.py
+  tests/
+    test_services.py
+
+# Install editable with dev tools:
+# python -m pip install -e ".[dev]"
+# Run: python -m matrix_core`
+            }
+          },
+          {
+            cs: {
+              title: "Source File: Program.cs Console Entry Point",
+              scope: "WHOLE SCRIPT",
+              desc: "A minimal compilable C# console source file using top-level statements and a reusable function.",
+              code: `using System;
+
+Console.WriteLine(Greet("Ada"));
+
+static string Greet(string name) => $"Hello, {name}!";
+
+// Create and run:
+// dotnet new console -n HelloApp
+// dotnet run --project HelloApp`
+            },
+            py: {
+              title: "Source File: __main__.py Entry Point",
+              scope: "WHOLE SCRIPT",
+              desc: "A module entry point supports both python -m package and direct import-safe execution.",
+              code: `def greet(name: str) -> str:
+    return f"Hello, {name}!"
+
+def main() -> None:
+    print(greet("Ada"))
+
+if __name__ == "__main__":
+    main()
+
+# Run: python -m matrix_core`
+            }
+          },
+          {
+            cs: {
+              title: "Source File: Classic Program.Main(string[] args)",
+              scope: "WHOLE SCRIPT",
+              desc: "Traditional C# console entry point using public static void Main(string[] args), with a default argument and exit code.",
+              code: `using System;
+
+namespace HelloApp;
+
+public static class Program
+{
+    public static void Main(string[] args)
+    {
+        string name = args.Length > 0 ? args[0] : "Ada";
+        Console.WriteLine($"Hello, {name}!");
+    }
+}
+
+// Create: dotnet new console -n HelloApp
+// Replace the generated Program.cs with this version.
+// Run: dotnet run --project HelloApp -- Ada`
+            },
+            py: {
+              title: "Source File: main(argv) and sys.argv",
+              scope: "WHOLE SCRIPT",
+              desc: "Python passes command-line arguments through sys.argv; main returns an exit code consumed by SystemExit.",
+              code: `import sys
+
+def main(argv: list[str]) -> int:
+    name = argv[1] if len(argv) > 1 else "Ada"
+    print(f"Hello, {name}!")
+    return 0
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv))
+
+# Run: python main.py Ada`
+            }
+          },
+          {
+            cs: {
+              title: "Source Files: Multiple Classes Across a C# Project",
+              scope: "WHOLE SCRIPT",
+              desc: "Runnable multi-file console example: Program.Main coordinates a model and service in separate files and namespaces.",
+              code: `// File: src/MatrixCore.App/Program.cs
+using System;
+using MatrixCore.Models;
+using MatrixCore.Services;
+
+namespace MatrixCore.App;
+
+public static class Program
+{
+    public static void Main(string[] args)
+    {
+        string name = args.Length > 0 ? args[0] : "Ada";
+        var person = new Person(name);
+        IGreetingService greeting = new GreetingService();
+        Console.WriteLine(greeting.Greet(person));
+    }
+}
+
+// File: src/MatrixCore.App/Models/Person.cs
+namespace MatrixCore.Models;
+
+public sealed class Person(string name)
+{
+    public string Name { get; } = name;
+}
+
+// File: src/MatrixCore.App/Services/IGreetingService.cs
+using MatrixCore.Models;
+
+namespace MatrixCore.Services;
+
+public interface IGreetingService
+{
+    string Greet(Person person);
+}
+
+// File: src/MatrixCore.App/Services/GreetingService.cs
+using MatrixCore.Models;
+
+namespace MatrixCore.Services;
+
+public sealed class GreetingService : IGreetingService
+{
+    public string Greet(Person person) => $"Hello, {person.Name}!";
+}
+
+// Create: dotnet new console -n MatrixCore.App -o src/MatrixCore.App
+// Replace generated Program.cs and add the other files at the paths above.
+// Run: dotnet run --project src/MatrixCore.App -- Ada`
+            },
+            py: {
+              title: "Source Files: Multiple Classes Across a Python Package",
+              scope: "WHOLE SCRIPT",
+              desc: "Runnable multi-file package example: __main__ handles argv while model and service classes live in importable modules.",
+              code: `# File: src/matrix_core/__main__.py
+import sys
+
+from matrix_core.models.person import Person
+from matrix_core.services.greeting_service import GreetingService
+
+def main(argv: list[str]) -> int:
+    name = argv[1] if len(argv) > 1 else "Ada"
+    person = Person(name)
+    print(GreetingService().greet(person))
+    return 0
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv))
+
+# File: src/matrix_core/models/person.py
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Person:
+    name: str
+
+# File: src/matrix_core/services/greeting_service.py
+from matrix_core.models.person import Person
+
+class GreetingService:
+    def greet(self, person: Person) -> str:
+        return f"Hello, {person.name}!"
+
+# Add empty __init__.py files to matrix_core/, models/, and services/.
+# Install: python -m pip install -e .
+# Run: python -m matrix_core Ada`
+            }
+          },
+          {
+            cs: {
+              title: "Source File: Domain Model (record)",
+              scope: "CLASS / MODULE",
+              desc: "A positional record is a concise immutable-by-default value-oriented data model.",
+              code: `namespace MatrixCore.Models;
+
+public sealed record Person(string Name, int Age);
+
+// Usage:
+// var person = new Person("Ada", 36);
+// Console.WriteLine(person.Name);`
+            },
+            py: {
+              title: "Source File: Domain Model (dataclass)",
+              scope: "CLASS / MODULE",
+              desc: "A dataclass generates common methods; frozen=True prevents field reassignment.",
+              code: `from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Person:
+    name: str
+    age: int
+
+# Usage:
+# person = Person("Ada", 36)
+# print(person.name)`
+            }
+          },
+          {
+            cs: {
+              title: "Source File: Interface and Service Implementation",
+              scope: "CLASS / MODULE",
+              desc: "C# declares an interface explicitly; dependency injection can consume the abstraction.",
+              code: `namespace MatrixCore.Services;
+
+public interface IGreetingService
+{
+    string Greet(string name);
+}
+
+public sealed class GreetingService : IGreetingService
+{
+    public string Greet(string name) => $"Hello, {name}!";
+}`
+            },
+            py: {
+              title: "Source File: Protocol and Service Implementation",
+              scope: "CLASS / MODULE",
+              desc: "Protocol enables structural typing: compatible objects need not inherit from the protocol.",
+              code: `from typing import Protocol
+
+class GreetingService(Protocol):
+    def greet(self, name: str) -> str: ...
+
+class DefaultGreetingService:
+    def greet(self, name: str) -> str:
+        return f"Hello, {name}!"
+
+def welcome(service: GreetingService, name: str) -> str:
+    return service.greet(name)`
+            }
+          },
+          {
+            cs: {
+              title: "Source File: JSON Read and Write",
+              scope: "FUNCTION / METHOD",
+              desc: "System.Text.Json maps JSON to typed records; use explicit encodings and handle file errors at the app boundary.",
+              code: `using System.Text.Json;
+using MatrixCore.Models;
+
+static void SavePerson(string path, Person person)
+{
+    string json = JsonSerializer.Serialize(person);
+    File.WriteAllText(path, json);
+}
+
+static Person? LoadPerson(string path) =>
+    JsonSerializer.Deserialize<Person>(File.ReadAllText(path));`
+            },
+            py: {
+              title: "Source File: JSON Read and Write",
+              scope: "FUNCTION / METHOD",
+              desc: "The json module reads dictionaries by default; dataclass conversion can be added when typed objects are needed.",
+              code: `import json
+from pathlib import Path
+
+def save_person(path: Path, person: dict[str, object]) -> None:
+    path.write_text(json.dumps(person, indent=2), encoding="utf-8")
+
+def load_person(path: Path) -> dict[str, object]:
+    data: object = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ValueError("Expected a JSON object")
+    return data`
+            }
+          },
+          {
+            cs: {
+              title: "Source File: xUnit Unit Test",
+              scope: "WHOLE SCRIPT",
+              desc: "A minimal xUnit test source file verifies a public behavior and integrates with dotnet test.",
+              code: `using MatrixCore.Services;
+using Xunit;
+
+public sealed class GreetingServiceTests
+{
+    [Fact]
+    public void Greet_IncludesName()
+    {
+        var service = new GreetingService();
+        Assert.Equal("Hello, Ada!", service.Greet("Ada"));
+    }
+}
+
+// Run: dotnet test`
+            },
+            py: {
+              title: "Source File: unittest Test Module",
+              scope: "WHOLE SCRIPT",
+              desc: "unittest is built in; pytest is a common alternative with function-based test discovery.",
+              code: `import unittest
+
+from matrix_core.services import DefaultGreetingService
+
+class GreetingServiceTests(unittest.TestCase):
+    def test_greet_includes_name(self) -> None:
+        service = DefaultGreetingService()
+        self.assertEqual(service.greet("Ada"), "Hello, Ada!")
+
+if __name__ == "__main__":
+    unittest.main()
+
+# Run: python -m unittest discover`
+            }
+          },
+          {
+            cs: {
+              title: "Source File: .csproj Build Metadata",
+              scope: "WHOLE SCRIPT",
+              desc: "The SDK-style project file declares target framework, nullable checks, and implicit using directives.",
+              code: `<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+</Project>`
+            },
+            py: {
+              title: "Source File: pyproject.toml Build Metadata",
+              scope: "WHOLE SCRIPT",
+              desc: "pyproject.toml is the standard central configuration file for package metadata and Python tooling.",
+              code: `[project]
+name = "matrix-core"
+version = "0.1.0"
+requires-python = ">=3.12"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]`
+            }
+          }
+        ]
+      },
+      {
+        id: "imports_api",
+        title: "14 // C# USING VS PYTHON IMPORT: COMMON API TREES",
+        subtitle: "Practical standard-library and .NET namespace index; representative public callables, not an exhaustive API dump",
+        rows: [
+          {
+            cs: {
+              title: "Import Syntax & Namespaces vs Modules",
+              scope: "SNIPPET",
+              desc: "C# using imports namespace names for lookup; Python import binds a module or selected names. Neither form imports every callable in existence.",
+              code: `using System.Text;
+using static System.Math;
+using IO = System.IO;
+
+// Namespace import, static member import, alias.
+// using does not load a package the way Python import does.
+// The assembly/package reference must also be available.`
+            },
+            py: {
+              title: "Import Syntax & Namespaces vs Modules",
+              scope: "SNIPPET",
+              desc: "Python imports modules or explicit members. Prefer module imports when they make the origin of a name clear.",
+              code: `import math
+from pathlib import Path
+import json as json_lib
+
+# import module; call with module.member(...)
+# from module import name; call name(...)
+# import module as alias; call alias.member(...)
+# Standard library modules need no pip install.`
+            }
+          },
+          {
+            cs: {
+              title: "System: Console, Math, String, Convert & Guid",
+              scope: "CLASS / MODULE",
+              desc: "Everyday base APIs in System; commonly available through SDK implicit usings in modern console projects.",
+              code: `using System
+├── Console
+│   ├── Write / WriteLine — write output
+│   ├── ReadLine — read a line
+│   └── ReadKey — read a key
+├── Math
+│   ├── Abs / Min / Max — numeric helpers
+│   ├── Floor / Ceiling / Round — rounding
+│   ├── Sqrt / Pow — roots and powers
+│   └── Clamp / Sign — bounds and sign
+├── Convert
+│   ├── ToInt32 / ToDouble — convert values
+│   └── ToString — convert to text
+├── String
+│   ├── IsNullOrEmpty / IsNullOrWhiteSpace
+│   ├── Join / Split / Replace
+│   └── StartsWith / Contains / Trim
+├── Guid
+│   ├── NewGuid — create identifier
+│   └── Parse / TryParse — parse identifier
+└── Environment
+    ├── GetEnvironmentVariable
+    └── Exit — set process exit code`
+            },
+            py: {
+              title: "Built-ins: print, input, len, numeric & iteration helpers",
+              scope: "CLASS / MODULE",
+              desc: "Built-ins are available without import; Python math and uuid modules provide related specialized APIs.",
+              code: `builtins (no import)
+├── print / input — output and line input
+├── len / range / enumerate / zip
+├── min / max / sum / sorted
+├── abs / round / pow / divmod
+├── int / float / str / bool — constructors
+├── isinstance / type — inspect types
+├── any / all — aggregate truth values
+├── map / filter — lazy iteration helpers
+└── open — open a file (prefer pathlib)
+
+math
+├── sqrt / floor / ceil / trunc
+├── isclose / isfinite / isnan
+├── sin / cos / radians / pi
+└── log / exp / gcd
+
+uuid
+└── uuid4 — generate random UUID`
+            }
+          },
+          {
+            cs: {
+              title: "System.Collections.Generic: Lists, Maps, Sets & Queues",
+              scope: "CLASS / MODULE",
+              desc: "Generic collection types enforce element/key/value types. Method availability varies slightly by concrete collection.",
+              code: `using System.Collections.Generic
+├── List<T>
+│   ├── Add / AddRange / Insert
+│   ├── Remove / RemoveAt / Clear
+│   ├── Contains / IndexOf / Find
+│   └── Sort / Reverse / ToArray
+├── Dictionary<TKey,TValue>
+│   ├── Add / TryAdd / TryGetValue
+│   ├── ContainsKey / Remove / GetValueOrDefault
+│   └── Keys / Values / TryGetValue
+├── HashSet<T>
+│   ├── Add / Remove / Contains
+│   └── UnionWith / IntersectWith
+├── Queue<T> — Enqueue / Dequeue / TryDequeue
+├── Stack<T> — Push / Pop / TryPop / Peek
+├── LinkedList<T> — AddFirst / AddLast / Remove
+└── PriorityQueue<TElement,TPriority>
+    ├── Enqueue / Dequeue / TryDequeue
+    └── Peek / TryPeek`
+            },
+            py: {
+              title: "collections: Deque, Counter, DefaultDict & OrderedDict",
+              scope: "CLASS / MODULE",
+              desc: "Python list/dict/set are built-ins; collections adds specialized containers useful for DSA and grouping.",
+              code: `collections
+├── deque
+│   ├── append / appendleft
+│   ├── pop / popleft
+│   ├── extend / extendleft
+│   └── rotate / clear
+├── Counter
+│   ├── most_common — rank frequencies
+│   ├── elements — expand positive counts
+│   └── update / subtract
+├── defaultdict
+│   └── factory-backed missing-key values
+├── OrderedDict
+│   ├── move_to_end
+│   └── popitem(last=...)
+└── namedtuple
+    └── factory for tuple-like record types
+
+dict: get / setdefault / update / pop / items
+set: add / discard / union / intersection`
+            }
+          },
+          {
+            cs: {
+              title: "System.Linq: Query, Project, Group & Aggregate",
+              scope: "CLASS / MODULE",
+              desc: "LINQ extension methods operate on IEnumerable<T>; many are deferred until enumeration, while ToList materializes.",
+              code: `using System.Linq
+├── Where — filter elements
+├── Select / SelectMany — project / flatten
+├── OrderBy / ThenBy / Reverse
+├── GroupBy / Join / Zip
+├── Distinct / Union / Intersect / Except
+├── Any / All / Contains
+├── First / FirstOrDefault / Single
+├── Count / Sum / Min / Max / Aggregate
+├── Skip / Take / SkipWhile / TakeWhile
+└── ToList / ToArray / ToDictionary — materialize
+
+// Most sequence operators are extension methods:
+// sequence.Where(predicate).Select(projector)`
+            },
+            py: {
+              title: "itertools & functools: Lazy Iteration and Functional Helpers",
+              scope: "CLASS / MODULE",
+              desc: "itertools provides lazy iterator building blocks; functools provides decorators, caching, and reductions.",
+              code: `itertools
+├── chain / chain.from_iterable — concatenate
+├── islice — slice an iterator
+├── product / permutations / combinations
+├── accumulate — running aggregate
+├── groupby — group adjacent equal keys
+└── pairwise / zip_longest
+
+functools
+├── reduce — fold values with a function
+├── partial — pre-fill function arguments
+├── lru_cache / cache — memoize calls
+├── wraps — preserve decorated metadata
+└── cmp_to_key — adapt comparison for sorting
+
+# itertools.groupby groups adjacent keys; sort first
+# when all matching keys should be in one group.`
+            }
+          },
+          {
+            cs: {
+              title: "System.IO: Files, Directories & Streams",
+              scope: "CLASS / MODULE",
+              desc: "File and Directory offer convenient static APIs; streams support larger or incremental data. Dispose streams with using.",
+              code: `using System.IO
+├── File
+│   ├── ReadAllText / ReadAllLines / ReadAllBytes
+│   ├── WriteAllText / WriteAllLines / WriteAllBytes
+│   ├── AppendAllText / Copy / Move / Delete
+│   └── Exists / OpenRead / Create
+├── Directory
+│   ├── CreateDirectory / Delete / Exists
+│   ├── EnumerateFiles / EnumerateDirectories
+│   └── GetCurrentDirectory
+├── Path
+│   ├── Combine / Join / GetFullPath
+│   ├── GetFileName / GetExtension
+│   └── GetTempPath
+└── StreamReader / StreamWriter
+    ├── ReadLine / ReadToEnd
+    └── Write / WriteLine`
+            },
+            py: {
+              title: "pathlib & os: Paths, Files, Environment & Directories",
+              scope: "CLASS / MODULE",
+              desc: "pathlib.Path is the usual object-oriented path API; os covers environment, process, and lower-level filesystem helpers.",
+              code: `pathlib.Path
+├── read_text / read_bytes
+├── write_text / write_bytes
+├── open / mkdir / unlink / rename
+├── exists / is_file / is_dir
+├── iterdir / glob / rglob
+├── name / suffix / stem / parent
+└── resolve / with_name / with_suffix
+
+os
+├── getenv / environ — environment variables
+├── getcwd / chdir — current directory
+├── listdir / scandir / makedirs
+├── remove / rename / replace
+└── path.join / exists / isfile / isdir`
+            }
+          },
+          {
+            cs: {
+              title: "System.Text & System.Text.Json: Text and JSON",
+              scope: "CLASS / MODULE",
+              desc: "StringBuilder helps repeated string construction; System.Text.Json serializes typed objects to and from JSON.",
+              code: `using System.Text
+├── StringBuilder
+│   ├── Append / AppendLine
+│   ├── Insert / Remove / Replace
+│   └── Clear / ToString
+├── Encoding
+│   ├── UTF8 / Unicode / ASCII
+│   ├── GetBytes / GetString
+│   └── RegisterProvider
+└── System.Text.Json.JsonSerializer
+    ├── Serialize<T> / SerializeToUtf8Bytes<T>
+    ├── Deserialize<T> / DeserializeAsync<T>
+    └── SerializeAsync<T> / SerializeToElement<T>
+
+// JSON needs serializable data and appropriate options.`
+            },
+            py: {
+              title: "json & string: JSON Encoding and String Operations",
+              scope: "CLASS / MODULE",
+              desc: "json converts between Python values and JSON text; str methods transform text and do not mutate the original string.",
+              code: `json
+├── dumps / dump — value to JSON text/file
+├── loads / load — JSON text/file to value
+└── JSONEncoder / JSONDecoder — customize conversion
+
+str methods
+├── split / rsplit / splitlines / join
+├── strip / lstrip / rstrip
+├── replace / translate / partition
+├── find / index / count
+├── startswith / endswith
+├── lower / upper / casefold / title
+└── format / encode
+
+# json.loads commonly returns dict, list, str,
+# int, float, bool, or None—not a custom class.`
+            }
+          },
+          {
+            cs: {
+              title: "System.Text.RegularExpressions: Regex",
+              scope: "CLASS / MODULE",
+              desc: "Regex provides pattern-based matching, extraction, replacement, and splitting; validate untrusted patterns and input sizes.",
+              code: `using System.Text.RegularExpressions
+├── Regex.IsMatch — test for a match
+├── Regex.Match / Matches — find match(es)
+├── Regex.Replace — replace matching text
+├── Regex.Split — split on a pattern
+├── Regex.Escape — escape literal pattern text
+└── Match / Group / Capture
+    ├── Success / Value / Index / Length
+    └── Groups — named and numbered captures
+
+// For repeated use, consider a compiled/generated regex.`
+            },
+            py: {
+              title: "re: Regular Expression Matching",
+              scope: "CLASS / MODULE",
+              desc: "The re module compiles patterns and supports search, match, extraction, substitution, and splitting.",
+              code: `re
+├── compile — create reusable Pattern
+├── search / match / fullmatch
+├── findall / finditer — extract matches
+├── sub / subn — substitute
+├── split — split on a pattern
+├── escape — quote literal text
+└── Pattern
+    ├── search / match / fullmatch
+    ├── findall / finditer
+    └── sub / split
+
+# Use raw strings for patterns: r"\\d+"`
+            }
+          },
+          {
+            cs: {
+              title: "System.DateTime & Stopwatch: Dates and Elapsed Time",
+              scope: "CLASS / MODULE",
+              desc: "Prefer DateTimeOffset for timestamps tied to a time zone; Stopwatch measures elapsed duration.",
+              code: `using System
+├── DateTime
+│   ├── Now / UtcNow / Today
+│   ├── Parse / TryParse / ParseExact
+│   └── AddDays / AddHours / ToString
+├── DateTimeOffset
+│   ├── UtcNow / ToUniversalTime
+│   └── Parse / ToString
+└── System.Diagnostics.Stopwatch
+    ├── StartNew / Start / Stop / Reset
+    ├── Restart
+    └── Elapsed / ElapsedMilliseconds
+
+// Store timestamps with a clear time-zone policy.`
+            },
+            py: {
+              title: "datetime & time: Dates, Time Zones and Clocks",
+              scope: "CLASS / MODULE",
+              desc: "datetime models dates/times and time zones; time.monotonic is appropriate for measuring elapsed duration.",
+              code: `datetime
+├── date.today / date.fromisoformat
+├── datetime.now / datetime.fromisoformat
+├── datetime.strptime / strftime
+├── timedelta — add/subtract durations
+└── timezone.utc — UTC zone
+
+time
+├── time / sleep
+├── monotonic / perf_counter — elapsed clocks
+└── strftime / gmtime / localtime
+
+# Prefer timezone-aware UTC timestamps:
+# datetime.now(timezone.utc)`
+            }
+          },
+          {
+            cs: {
+              title: "System.Threading.Tasks: Async Tasks & Parallel Work",
+              scope: "CLASS / MODULE",
+              desc: "Task represents asynchronous work; use async APIs for I/O and distinguish concurrency from CPU parallelism.",
+              code: `using System.Threading;
+using System.Threading.Tasks;
+System.Threading.Tasks
+├── Task / Task<T>
+│   ├── Run — schedule CPU-bound work
+│   ├── WhenAll — await all tasks
+│   ├── WhenAny — await first completion
+│   ├── Delay — asynchronous timer
+│   └── FromResult / CompletedTask
+└── Parallel
+    ├── For / ForEach
+    └── Invoke
+
+System.Threading.CancellationToken
+├── IsCancellationRequested
+└── ThrowIfCancellationRequested
+// Prefer naturally async I/O APIs over wrapping I/O in Task.Run.`
+            },
+            py: {
+              title: "asyncio: Coroutine Scheduling and Async I/O",
+              scope: "CLASS / MODULE",
+              desc: "asyncio runs cooperative coroutines; blocking CPU work should not run directly on the event loop.",
+              code: `asyncio
+├── run — start an event loop
+├── create_task — schedule a coroutine
+├── gather / TaskGroup — await task groups
+├── wait_for / timeout — time limits
+├── sleep — non-blocking delay
+├── Queue / Lock / Semaphore
+├── open_connection / start_server
+└── to_thread — offload blocking function
+
+asyncio.Task
+├── cancel / done / result
+└── add_done_callback
+
+# asyncio APIs are generally used with await.`
+            }
+          },
+          {
+            cs: {
+              title: "System.Diagnostics & Microsoft.Extensions.Logging",
+              scope: "CLASS / MODULE",
+              desc: "Diagnostics includes timing and process helpers; structured application logging commonly comes from Microsoft.Extensions.Logging.",
+              code: `System.Diagnostics
+├── Debug / Trace
+│   ├── WriteLine / Write
+│   └── Assert
+├── Stopwatch
+│   ├── StartNew / Restart / Stop
+│   └── Elapsed / ElapsedMilliseconds
+└── Process
+    ├── Start / GetCurrentProcess
+    ├── WaitForExit / Kill
+    └── HasExited / ExitCode
+
+Microsoft.Extensions.Logging
+├── ILogger.Log<TState>
+├── ILogger.LogInformation / LogWarning
+├── ILogger.LogError / LogDebug
+└── ILogger.BeginScope
+
+// Logging abstractions are supplied by a package/framework reference.`
+            },
+            py: {
+              title: "logging & subprocess: Logs and Child Processes",
+              scope: "CLASS / MODULE",
+              desc: "logging supports severity and structured records; subprocess runs external programs with explicit argument lists.",
+              code: `logging
+├── debug / info / warning
+├── error / exception / critical
+├── basicConfig — configure root logger
+├── getLogger — obtain named logger
+└── Logger
+    ├── debug / info / warning
+    ├── error / exception / critical
+    └── setLevel / addHandler
+
+subprocess
+├── run — run and optionally capture result
+├── Popen — manage a running process
+└── CalledProcessError / TimeoutExpired
+
+# Prefer subprocess.run([...], check=True)
+# over shell=True for ordinary command execution.`
+            }
+          },
+          {
+            cs: {
+              title: "System.Collections.Concurrent: Thread-Safe Collections",
+              scope: "CLASS / MODULE",
+              desc: "Concurrent collections coordinate multiple threads; they do not make a whole multi-step workflow atomic.",
+              code: `using System.Collections.Concurrent
+├── ConcurrentDictionary<TKey,TValue>
+│   ├── TryAdd / TryGetValue / TryRemove
+│   ├── GetOrAdd / AddOrUpdate
+│   └── TryUpdate
+├── ConcurrentQueue<T>
+│   ├── Enqueue / TryDequeue / TryPeek
+├── ConcurrentStack<T>
+│   ├── Push / TryPop / TryPeek
+└── BlockingCollection<T>
+    ├── Add / Take / GetConsumingEnumerable
+    └── CompleteAdding
+
+// Choose synchronization based on the full operation.`
+            },
+            py: {
+              title: "queue & threading: Synchronized Queues and Locks",
+              scope: "CLASS / MODULE",
+              desc: "queue.Queue provides synchronized producer/consumer operations for threads; asyncio.Queue is for async tasks.",
+              code: `queue.Queue
+├── put / get — add and remove items
+├── put_nowait / get_nowait
+├── task_done / join — track work
+└── qsize / empty / full — approximate state
+
+threading
+├── Thread.start / join / is_alive
+├── Lock.acquire / release
+├── Event.set / clear / wait
+└── Semaphore.acquire / release
+
+# For async producers/consumers use asyncio.Queue,
+# not queue.Queue inside an event loop.`
+            }
+          }
+        ]
+      }
+    ];
+
+    const SITE_MAP_ITEMS = [
+      { id: "bootstrap", label: "Project setup & entry points" },
+      { id: "types", label: "Types, strings & slicing" },
+      { id: "control", label: "Control flow & iteration" },
+      { id: "functions", label: "Functions, generators & OOP" },
+      { id: "collections", label: "Collections & hash maps" },
+      { id: "io_async", label: "Files, resources & async" },
+      { id: "dsa_core", label: "Core structures & heaps" },
+      { id: "dsa_hard", label: "Matrices, graphs & trie" },
+      { id: "dsa_more", label: "Linked lists, trees & traversal" },
+      { id: "dsa_patterns", label: "Search, windows & algorithms" },
+      { id: "source_files", label: "Project layout & source files" },
+      { id: "imports_api", label: "Using / import API trees" }
+    ];
+
+    const FLASHCARD_DATA = [
+      {
+        topic: "Types & runtime",
+        question: "How do C# and Python differ in when types are enforced?",
+        cs: "C# checks declared and inferred types at compile time. Nullable annotations and generics help catch mismatches before the program runs.",
+        py: "Python binds names dynamically at runtime. Type hints aid editors and type checkers, but Python does not enforce them by itself.",
+        takeaway: "C# is statically typed; Python is dynamically typed with optional static analysis."
+      },
+      {
+        topic: "Collections",
+        question: "What is the practical difference between List<T> and Python list?",
+        cs: "List<T> is a resizable array whose elements share one compile-time type. Indexing is O(1); inserting at the front is O(n).",
+        py: "list is a resizable array of object references and may contain mixed types. Indexing is O(1); inserting at the front is O(n).",
+        takeaway: "Both are dynamic arrays, not linked lists; use a deque for efficient operations at both ends."
+      },
+      {
+        topic: "Linked lists",
+        question: "Which built-in linked-list options should I reach for?",
+        cs: "LinkedList<T> is a doubly linked list with first/last node handles; adding or removing a known node is O(1).",
+        py: "Python has no general-purpose linked-list collection. collections.deque is a block-based deque optimized for both ends, not a node-linked list API.",
+        takeaway: "For most Python queue/deque use cases choose deque; implement nodes only when the algorithm requires them."
+      },
+      {
+        topic: "Hash maps",
+        question: "Are Dictionary<TKey,TValue> and dict interchangeable?",
+        cs: "Dictionary<TKey,TValue> is generic and statically typed. TryGetValue is the common safe lookup; average lookup is O(1).",
+        py: "dict is dynamically typed (or annotated with generic key/value types). get supplies a fallback; average lookup is O(1).",
+        takeaway: "Both are hash tables; key equality and hash-code rules must agree."
+      },
+      {
+        topic: "Equality",
+        question: "Why can equality behave differently for custom objects?",
+        cs: "Classes default to reference equality unless Equals/GetHashCode or an equality interface is implemented; records provide value-oriented equality.",
+        py: "A normal class defaults to identity-based equality unless __eq__ is implemented; dataclasses generate field-based equality by default.",
+        takeaway: "Define equality and hashing together before using custom objects as set members or map keys."
+      },
+      {
+        topic: "Null / missing values",
+        question: "What are the C# and Python ways to represent 'no value'?",
+        cs: "Nullable reference/value types use ? annotations; null checks and nullable analysis make absence explicit.",
+        py: "None represents absence. Optional[T] (or T | None) documents that a value can be missing; callers still check at runtime.",
+        takeaway: "Neither language's type annotation alone makes a missing value safe to dereference."
+      },
+      {
+        topic: "Iteration",
+        question: "What is the closest equivalent to Python enumerate()?",
+        cs: "Use Select((value, index) => ...) with LINQ or a for loop when you need an index.",
+        py: "enumerate(iterable) yields index/value pairs directly and is the idiomatic indexed loop.",
+        takeaway: "Both can iterate lazily; Python enumerate is built in, while C# commonly uses LINQ or an indexed loop."
+      },
+      {
+        topic: "Resource management",
+        question: "How do using and with help when working with files?",
+        cs: "using / using declarations dispose IDisposable resources even when an exception exits the scope.",
+        py: "with calls a context manager's exit protocol, ensuring cleanup even when an exception is raised.",
+        takeaway: "Both provide deterministic cleanup; do not rely on garbage collection to close files promptly."
+      },
+      {
+        topic: "Async",
+        question: "Does async automatically make CPU-heavy work faster?",
+        cs: "Task-based async is primarily for non-blocking I/O. CPU parallelism generally needs parallel APIs or an appropriate worker.",
+        py: "asyncio is cooperative concurrency for awaitable I/O. CPU-heavy work blocks the event loop unless moved to another process/thread strategy.",
+        takeaway: "Async improves I/O concurrency; it is not the same as parallel CPU execution."
+      },
+      {
+        topic: "Generics",
+        question: "How do generic types compare?",
+        cs: "Generics such as List<int> are part of the type system and constrain values at compile time.",
+        py: "Generic hints such as list[int] communicate intent to type checkers; runtime containers still accept other values.",
+        takeaway: "C# generic constraints are enforced by compilation; Python generic annotations are usually analysis-time guidance."
+      },
+      {
+        topic: "BFS / DFS",
+        question: "Which data structure powers BFS and DFS?",
+        cs: "BFS uses Queue<T>; DFS uses Stack<T> or recursion. Mark visited nodes to avoid repeated traversal.",
+        py: "BFS should use collections.deque; DFS uses a list as a stack or recursion. A set is the common visited structure.",
+        takeaway: "Both are O(V + E) with adjacency lists; avoid Python list.pop(0) for BFS."
+      },
+      {
+        topic: "Algorithm complexity",
+        question: "What do O(1), O(log n), and O(n) tell me?",
+        cs: "Big-O describes how an operation's resource use scales as input size grows, independent of syntax.",
+        py: "The same complexity model applies; built-in operations may hide loops, so check the collection's operation costs.",
+        takeaway: "Choose the data structure by operation complexity, not by whether its syntax looks shorter."
+      },
+      {
+        topic: "Project structure",
+        question: "What replaces a single script as a project grows?",
+        cs: "Split code into namespaces and project files; interfaces, assemblies, and the .csproj define boundaries and build settings.",
+        py: "Split code into importable package modules; pyproject.toml defines package metadata and tool configuration.",
+        takeaway: "Both benefit from small cohesive modules; C# project boundaries are explicit, while Python commonly uses packages."
+      }
+    ];
+
+    function escapeHtml(raw) {
+      return raw
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function renderSiteMap() {
+      const positions = SITE_MAP_ITEMS.map((item, index) => {
+        const y = 62 + index * 46;
+        return `
+          <line class="map-edge" x1="205" y1="${y}" x2="715" y2="${y}" />
+          <a class="map-node" href="#section-${item.id}" aria-label="C# section: ${escapeHtml(item.label)}">
+            <rect x="20" y="${y - 16}" width="185" height="32"></rect>
+            <text x="112" y="${y + 5}">${escapeHtml(item.label)}</text>
+          </a>
+          <a class="map-node" href="#section-${item.id}" aria-label="Python section: ${escapeHtml(item.label)}">
+            <rect x="715" y="${y - 16}" width="185" height="32"></rect>
+            <text x="807" y="${y + 5}">${escapeHtml(item.label)}</text>
+          </a>`;
+      }).join("");
+      const height = 88 + SITE_MAP_ITEMS.length * 46;
+      const searchText = SITE_MAP_ITEMS.map(item => `${item.id} ${item.label}`).join(" ");
+      return `
+        <section class="category-section" id="section-site_map" data-section-cat="site_map">
+          <div class="category-banner">
+            <h2>12 // SITE MAP: MATCHED C# ↔ PYTHON SECTIONS</h2>
+            <span>GRAPH // click a node to jump to its paired comparison</span>
+          </div>
+          <div class="comparison-row" data-scope="SNIPPET"
+               data-search="${escapeHtml(`site map sitemap graph C# Python sections ${searchText}`.toLowerCase())}">
+            <div class="site-map-wrap">
+              <svg class="site-map" viewBox="0 0 920 ${height}" role="img"
+                   aria-label="Graph connecting matching C# and Python reference sections">
+                <text x="112" y="24" fill="var(--fg-bright)" text-anchor="middle" font-family="monospace">C# / .NET</text>
+                <text x="807" y="24" fill="var(--fg-bright)" text-anchor="middle" font-family="monospace">PYTHON</text>
+                ${positions}
+              </svg>
+            </div>
+            <p class="map-legend">Each line connects the equivalent topic section. The language-specific code and notes are paired row-by-row inside that section.</p>
+          </div>
+        </section>`;
+    }
+
+    function renderFlashcards() {
+      const cards = FLASHCARD_DATA.map((card, index) => {
+        const answerId = `flashcard-answer-${index}`;
+        const searchBlob = [
+          "flash cards flashcard flashcards concept concepts difference differences",
+          card.topic, card.question, card.cs, card.py, card.takeaway
+        ].join(" ").toLowerCase();
+        return `
+          <div class="comparison-row flashcard-row" data-scope="SNIPPET"
+               data-search="${escapeHtml(searchBlob)}">
+            <article class="flashcard-card">
+              <button class="flashcard-toggle" type="button" aria-expanded="false" aria-controls="${answerId}">
+                <span class="flashcard-topic">${escapeHtml(card.topic)} // CARD ${String(index + 1).padStart(2, "0")}</span>
+                <span class="flashcard-question">${escapeHtml(card.question)}</span>
+                <span class="flashcard-hint">[REVEAL ANSWER]</span>
+              </button>
+              <div class="flashcard-answer" id="${answerId}" hidden>
+                <p><strong>C# / .NET:</strong> ${escapeHtml(card.cs)}</p>
+                <p><strong>Python:</strong> ${escapeHtml(card.py)}</p>
+                <p class="flashcard-takeaway"><strong>KEY DIFFERENCE:</strong> ${escapeHtml(card.takeaway)}</p>
+              </div>
+            </article>
+          </div>`;
+      }).join("");
+      return `
+        <section class="category-section" id="section-flashcards" data-section-cat="flashcards">
+          <div class="category-banner">
+            <h2>13 // FLASH CARDS: LANGUAGE CONCEPTS & DIFFERENCES</h2>
+            <span>SEARCH // flash cards, flashcard, or any concept</span>
+          </div>
+          <div class="flashcard-grid">${cards}</div>
+        </section>`;
+    }
+
+    function renderSheets() {
+      const root = document.getElementById("sheetsRoot");
+      const sheetsHtml = CHEAT_SHEET_DATA.map(cat => {
+        const rowsHtml = cat.rows.map((row, rIdx) => {
+          const csId = `code-${cat.id}-${rIdx}-cs`;
+          const pyId = `code-${cat.id}-${rIdx}-py`;
+          const searchBlob = `${cat.title} ${cat.subtitle} ${row.cs.title} ${row.cs.desc} ${row.cs.code} ${row.py.title} ${row.py.desc} ${row.py.code}`.toLowerCase();
+
+          return `
+            <div class="comparison-row"
+                 data-cat="${cat.id}"
+                 data-scope="${row.cs.scope}"
+                 data-search="${escapeHtml(searchBlob)}">
+              <!-- LEFT COLUMN: C# -->
+              <article class="lang-cell">
+                <div>
+                  <div class="cell-header">
+                    <div class="cell-title-group">
+                      <span class="lang-tag">C# // .NET</span>
+                      <h3 class="cell-title">${escapeHtml(row.cs.title)}</h3>
+                    </div>
+                    <div class="badges-wrap">
+                      <span class="scope-badge" data-scope="${escapeHtml(row.cs.scope)}">${escapeHtml(row.cs.scope)}</span>
+                    </div>
+                  </div>
+                  <p class="cell-desc">${escapeHtml(row.cs.desc)}</p>
+                </div>
+                <div class="code-wrapper">
+                  <div class="code-toolbar">
+                    <span>${cat.id === "imports_api" ? "CSHARP_USING_API_TREE" : "CSHARP_SOURCE.cs"}</span>
+                    <button type="button" class="copy-btn" data-target="${csId}">[COPY_CODE]</button>
+                  </div>
+                  <pre><code id="${csId}">${escapeHtml(row.cs.code)}</code></pre>
+                </div>
+              </article>
+
+              <!-- RIGHT COLUMN: PYTHON -->
+              <article class="lang-cell">
+                <div>
+                  <div class="cell-header">
+                    <div class="cell-title-group">
+                      <span class="lang-tag">PYTHON // 3.13</span>
+                      <h3 class="cell-title">${escapeHtml(row.py.title)}</h3>
+                    </div>
+                    <div class="badges-wrap">
+                      <span class="scope-badge" data-scope="${escapeHtml(row.py.scope)}">${escapeHtml(row.py.scope)}</span>
+                    </div>
+                  </div>
+                  <p class="cell-desc">${escapeHtml(row.py.desc)}</p>
+                </div>
+                <div class="code-wrapper">
+                  <div class="code-toolbar">
+                    <span>${cat.id === "imports_api" ? "PYTHON_IMPORT_API_TREE" : "PYTHON_SOURCE.py"}</span>
+                    <button type="button" class="copy-btn" data-target="${pyId}">[COPY_CODE]</button>
+                  </div>
+                  <pre><code id="${pyId}">${escapeHtml(row.py.code)}</code></pre>
+                </div>
+              </article>
+            </div>
+          `;
+        }).join("");
+
+        return `
+          <section class="category-section" id="section-${cat.id}" data-section-cat="${cat.id}">
+            <div class="category-banner">
+              <h2>${escapeHtml(cat.title)}</h2>
+              <span>${escapeHtml(cat.subtitle)}</span>
+            </div>
+            ${rowsHtml}
+          </section>
+        `;
+      }).join("");
+      root.innerHTML = `${renderSiteMap()}${sheetsHtml}${renderFlashcards()}`;
+    }
+
+    function populatePrintSections() {
+      const select = document.getElementById("printSectionsSelect");
+      const options = Array.from(document.querySelectorAll(".category-section"))
+        .map(section => {
+          const option = document.createElement("option");
+          option.value = section.dataset.sectionCat;
+          option.textContent = section.querySelector(".category-banner h2").textContent;
+          return option;
+        });
+      select.replaceChildren(...options);
+    }
+
+    function preparePrint() {
+      const mode = document.getElementById("printScopeSelect").value;
+      const selectedCategories = new Set(
+        Array.from(document.getElementById("printSectionsSelect").selectedOptions, option => option.value)
+      );
+      const sections = Array.from(document.querySelectorAll(".category-section"));
+
+      if (mode === "selected" && selectedCategories.size === 0) {
+        window.alert("Select one or more sections to print.");
+        return false;
+      }
+
+      if (mode === "current" && !document.querySelector(".category-section:not(.hidden) .comparison-row:not(.hidden)")) {
+        window.alert("The current filters show no results to print.");
+        return false;
+      }
+
+      document.body.classList.remove("print-all", "print-selected", "print-grayscale");
+      document.body.classList.add(mode === "all" ? "print-all" : mode === "selected" ? "print-selected" : "print-current");
+      if (document.getElementById("printColorSelect").value === "grayscale") {
+        document.body.classList.add("print-grayscale");
+      }
+
+      sections.forEach(section => {
+        const isSelected = selectedCategories.has(section.dataset.sectionCat);
+        section.classList.toggle("print-exclude", mode === "selected" && !isSelected);
+        section.classList.toggle("print-selected-section", mode === "selected" && isSelected);
+      });
+
+      return true;
+    }
+
+    function clearPrintState() {
+      document.body.classList.remove("print-all", "print-selected", "print-current", "print-grayscale");
+      document.querySelectorAll(".category-section").forEach(section => {
+        section.classList.remove("print-exclude", "print-selected-section");
+      });
+    }
+
+    function applyFilters() {
+      const query = document.getElementById("searchInput").value.trim().toLowerCase();
+      const scope = document.getElementById("scopeSelect").value;
+      const activePill = document.querySelector(".nav-pill.active");
+      const activeCat = activePill ? activePill.dataset.cat : "ALL";
+
+      document.querySelectorAll(".category-section").forEach(sec => {
+        const secCat = sec.dataset.sectionCat;
+        const catMatches = (activeCat === "ALL" || activeCat === secCat);
+        let visibleRows = 0;
+
+        sec.querySelectorAll(".comparison-row").forEach(row => {
+          const scopeMatches = (scope === "ALL" || row.dataset.scope === scope);
+          const searchMatches = (!query || (row.dataset.search || "").includes(query));
+          const show = catMatches && scopeMatches && searchMatches;
+          row.classList.toggle("hidden", !show);
+          if (show) visibleRows++;
+        });
+
+        sec.classList.toggle("hidden", visibleRows === 0);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderSheets();
+      populatePrintSections();
+
+      document.getElementById("printScopeSelect").addEventListener("change", (e) => {
+        document.getElementById("printSectionsSelect").hidden = e.target.value !== "selected";
+      });
+
+      window.addEventListener("afterprint", clearPrintState);
+
+      // Copy button delegation
+      document.body.addEventListener("click", async (e) => {
+        const mapLink = e.target.closest(".map-node");
+        if (mapLink) {
+          document.getElementById("searchInput").value = "";
+          document.getElementById("scopeSelect").value = "ALL";
+          document.querySelectorAll(".nav-pill").forEach(p => p.classList.remove("active"));
+          document.querySelector('.nav-pill[data-cat="ALL"]').classList.add("active");
+          applyFilters();
+        }
+
+        const flipButton = e.target.closest(".flashcard-toggle");
+        if (flipButton) {
+          const answer = document.getElementById(flipButton.getAttribute("aria-controls"));
+          if (answer) {
+            const expanded = flipButton.getAttribute("aria-expanded") === "true";
+            flipButton.setAttribute("aria-expanded", String(!expanded));
+            answer.hidden = expanded;
+            flipButton.querySelector(".flashcard-hint").textContent = expanded ? "[REVEAL ANSWER]" : "[HIDE ANSWER]";
+          }
+          return;
+        }
+        const btn = e.target.closest(".copy-btn");
+        if (!btn) return;
+        const targetId = btn.getAttribute("data-target");
+        const codeEl = document.getElementById(targetId);
+        if (!codeEl) return;
+
+        try {
+          await navigator.clipboard.writeText(codeEl.textContent);
+          const original = btn.textContent;
+          btn.textContent = "[COPIED_OK]";
+          btn.classList.add("copied");
+          setTimeout(() => {
+            btn.textContent = original;
+            btn.classList.remove("copied");
+          }, 1400);
+        } catch (err) {
+          btn.textContent = "[ERR_COPY]";
+        }
+      });
+
+      // Category Navigation Pills
+      document.getElementById("categoryNav").addEventListener("click", (e) => {
+        const pill = e.target.closest(".nav-pill");
+        if (!pill) return;
+        document.querySelectorAll(".nav-pill").forEach(p => p.classList.remove("active"));
+        pill.classList.add("active");
+        applyFilters();
+      });
+
+      // Search & Scope Filter
+      document.getElementById("searchInput").addEventListener("input", applyFilters);
+      document.getElementById("scopeSelect").addEventListener("change", applyFilters);
+
+      // Reset Filters
+      document.getElementById("resetBtn").addEventListener("click", () => {
+        document.getElementById("searchInput").value = "";
+        document.getElementById("scopeSelect").value = "ALL";
+        document.querySelectorAll(".nav-pill").forEach(p => p.classList.remove("active"));
+        document.querySelector('.nav-pill[data-cat="ALL"]').classList.add("active");
+        applyFilters();
+      });
+
+      // Print Button
+      document.getElementById("printBtn").addEventListener("click", () => {
+        if (!preparePrint()) return;
+        window.print();
+      });
+    });
+  </script>
+</body>
+
+</html>
