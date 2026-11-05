@@ -4,7 +4,7 @@ An interactive, single-file reference for comparing C#/.NET and Python. The page
 
 ## Open the reference
 
-Open [`gemini-code-1793908095528.html`](./gemini-code-1793908095528.html) in a modern web browser. It runs locally and does not require a server, package installation, or network access.
+Open [`gemini-code-1793908095528.html`](./index.html) in a modern web browser. It runs locally and does not require a server, package installation, or network access.
 
 ## What's inside
 
